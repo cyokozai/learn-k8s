@@ -1,8 +1,8 @@
-# つくって、壊して、直して学ぶKubernetes入門
+# つくって、壊して、直して学ぶ Kubernetes 入門
 
 ## 目次
 
-- [つくって、壊して、直して学ぶKubernetes入門](#つくって壊して直して学ぶkubernetes入門)
+- [つくって、壊して、直して学ぶ Kubernetes 入門](#つくって壊して直して学ぶ-kubernetes-入門)
   - [目次](#目次)
   - [第一章 | 作ってみよう Kubernetes](#第一章--作ってみよう-kubernetes)
     - [Docker](#docker)

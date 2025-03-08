@@ -1,11 +1,19 @@
-# learn-k8s
+# What is Kubernetes ?
 
-つくって、壊して、直して学ぶk8s入門 -> k8sコンテナセキュリティ
+Kubernetes (k8s) は、コンテナ化されたアプリケーションのデプロイ、自動化、スケーリング、および運用を行うためのオープンソースのプラットフォームです。  
+Googleによって設計され、現在はCloud Native Computing Foundation（CNCF）によって管理されています。
 
 ## 目次
 
-- [learn-k8s](#learn-k8s)
+- [What is Kubernetes ?](#what-is-kubernetes-)
   - [目次](#目次)
-  - [第一章](#第一章)
+  - [つくって、壊して、直して学ぶKubernetes入門](#つくって壊して直して学ぶkubernetes入門)
+  - [Kubernetesコンテナセキュリティ](#kubernetesコンテナセキュリティ)
 
-## 第一章
+## つくって、壊して、直して学ぶKubernetes入門
+
+- [README](k8s-mbf/README.md)
+
+## Kubernetesコンテナセキュリティ
+
+- [README](k8s-sec/README.md)

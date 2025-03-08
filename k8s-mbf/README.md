@@ -35,11 +35,11 @@ Docker の登場以来、コンテナ仮想化技術を採用した開発・運�
 
 #### 仮想マシン (VM) よりも高速にアプリケーションを起動できるようになった
 
-
+![image1](./images/vmcontainer.png)
 
 #### マイクロサービスアーキテクチャとコンテナの相性が良い
 
-
+![image2](./images/monorisandms.png)
 
 ### Docker のインストール (Ubuntu)
 

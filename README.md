@@ -1,7 +1,11 @@
 # What is Kubernetes ?
 
-Kubernetes (k8s) は、コンテナ化されたアプリケーションのデプロイ、自動化、スケーリング、および運用を行うためのオープンソースのプラットフォームです。  
-Googleによって設計され、現在はCloud Native Computing Foundation（CNCF）によって管理されています。
+Kubernetes (k8s) は、コンテナ化されたアプリケーションのデプロイ、自動化、スケーリング、および運用を行うためのオープンソースのプラットフォームである。  
+Googleによって設計され、現在はCloud Native Computing Foundation（CNCF）によって管理されている。
+
+- 参考:
+  - [Kubernetes Overview](https://kubernetes.io/docs/concepts/overview/)
+  - [Kubernetesとは？](https://cloud.google.com/learn/what-is-kubernetes?hl=ja)
 
 ## 目次
 

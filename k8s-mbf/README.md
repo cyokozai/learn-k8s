@@ -111,6 +111,8 @@ Docker を使うことで、どの OS や環境でコンテナを実行しても
   Docker でコンテナを作成するには、コンテナの元となるイメージ (image) を取得する必要があります。  
   例えば、`nginx` のコンテナをデプロイする場面を考える。  
   `nginx` のイメージは Nginx 公式が Docker Hub にイメージを公開しているものを使用する。  
-
+  ```shell
+  $ docker run --name some-nginx -v /some/content:/usr/share/nginx/html:ro -d nginx
+  ```
 
 ## Chapter 1.2 作ってみよう Kubernetes | Kubernetes クラスタを作ってみる

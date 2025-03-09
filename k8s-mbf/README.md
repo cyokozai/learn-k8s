@@ -13,7 +13,9 @@
       - [Docker のインストール (Ubuntu)](#docker-のインストール-ubuntu)
       - [Docker の基本コマンド](#docker-の基本コマンド)
     - [Docker image と　Dockerfile](#docker-image-とdockerfile)
+      - [Docker image](#docker-image)
   - [Chapter 1.2 作ってみよう Kubernetes | Kubernetes クラスタを作ってみる](#chapter-12-作ってみよう-kubernetes--kubernetes-クラスタを作ってみる)
+    - [minikube の環境構築からクラスタのデプロイまで](#minikube-の環境構築からクラスタのデプロイまで)
 
 ## Chapter 1.1 作ってみよう Kubernetes | Doker コンテナを作ってみる
 
@@ -68,51 +70,117 @@ Docker を使うことで、どの OS や環境でコンテナを実行しても
 - イメージを取得  
   (公式の nginx コンテナイメージをダウンロード)
 
-    ```shell
-    docker pull nginx
-    ```
+  ```shell
+  docker pull nginx
+  ```
 
 - コンテナを起動  
   (nginx をバックグラウンドで起動し、8080 でアクセス可能にする)
 
-    ```shell
-    docker run -d -p 8080:80 nginx
-    ```
+  ```shell
+  docker run -d -p 8080:80 nginx
+  ```
 
 - 実行中のコンテナを確認
 
-    ```shell
-    docker ps
-    ```
+  ```shell
+  docker ps
+  ```
 
 - コンテナを停止
 
-    ```shell
-    docker stop <コンテナID>
-    ```
+  ```shell
+  docker stop <コンテナID>
+  ```
 
 - コンテナを削除
 
-    ```shell
-    docker rm <コンテナID>
-    ```
+  ```shell
+  docker rm <コンテナID>
+  ```
 
 - イメージを削除
 
-    ```shell
-    docker rmi <イメージID>
-    ```
+  ```shell
+  docker rmi <イメージID>
+  ```
 
 </div></details>
 
 ### Docker image と　Dockerfile
 
-- Docker image
-  Docker でコンテナを作成するには、コンテナの元となるイメージ (image) を取得する必要があります。  
-  例えば、`nginx` のコンテナをデプロイする場面を考える。  
-  `nginx` のイメージは Nginx 公式が Docker Hub にイメージを公開しているものを使用する。  
+#### Docker image  
+
+Docker でコンテナを作成するには、コンテナの元となるイメージ (image) を取得する必要があります。  
+例えば、`nginx` のコンテナをデプロイする場面を考える。  
+`nginx` のイメージは Nginx 公式が Docker Hub にイメージを公開しているものを使用する。  
+
+- 公式の Docker Hub に掲載している方法でイメージのダウンロードからコンテナのデプロイまでを行うことができる
+
   ```shell
-  $ docker run --name some-nginx -v /some/content:/usr/share/nginx/html:ro -d nginx
+  docker run --name some-nginx -v /some/content:/usr/share/nginx/html:ro -d nginx
+  ```
+
+- `neignx` コンテナが起動したらコンテナの様子をログから確認する
+
+  ```shell
+  docker logs --tail 1000 -f some-nginx
+  ```
+
+- 使い終わったコンテナは次のコマンドで削除する  
+  ⚠️ ボリュームの永続化が行われていない場合、コンテナの終了とともに内部のデータはすべて削除されるので注意すること
+
+  ```shell
+  docker 
   ```
 
 ## Chapter 1.2 作ってみよう Kubernetes | Kubernetes クラスタを作ってみる
+
+### minikube の環境構築からクラスタのデプロイまで
+
+minikube は Kubernetes をローカル環境で手軽にシミュレーションできる便利なツールのひとつである。  
+minikube の詳細なインストール方法については[公式サイト](https://minikube.sigs.k8s.io/docs/start/?arch=%2Flinux%2Fx86-64%2Fstable%2Fbinary+download)を参照されたい。  
+以下は今回の学習で使用する環境構築について解説する。  
+
+- LinuxOS (x86) 環境では、以下のコマンドを使ってバイナリをダウンロードする  
+
+  ```shell
+  curl -LO https://github.com/kubernetes/minikube/releases/latest/download/minikube-linux-amd64
+  ```
+
+- minikube のインストールを実行する  
+
+  ```shell
+  sudo install minikube-linux-amd64 /usr/local/bin/minikube
+  ```
+
+- インストールが完了したらバイナリデータを削除する  
+
+  ```shell
+  rm minikube-linux-amd64
+  ```
+
+- minikube を起動する  
+
+  ```shell
+  minikube start
+  ```
+
+- `kubectl` コマンドのエイリアスを設定して実行しやすくする  
+
+  ```shell
+  alias kubectl="minikube kubectl --"
+  ```
+
+- 現在獲得できるクラスタのコンテキストを表示する  
+
+  ```shell
+  kubectl config get-contexts
+  ```
+
+  - 出力結果  
+
+    ```shell
+    CURRENT   NAME       CLUSTER    AUTHINFO   NAMESPACE
+    *         minikube   minikube   minikube   default
+    ```

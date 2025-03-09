@@ -228,23 +228,86 @@ Minikube の詳細なインストール方法については[公式サイト](ht
   kubectl create deployment hello-minikube --image=registry.k8s.io/echoserver:1.10
   ```
 
-- Service を作成し 8080 番ポートで `hello-minikube` を公開する
+- Service を作成し 8080 番ポートで `hello-minikube` を公開する  
 
   ```shell
   kubectl expose deployment hello-minikube --type=NodePort --port=8080
   ```
 
-- Podが稼働していることを確認する
+- Pod が稼働していることを確認する  
 
-```shell
-kubectl get pods
-```
-
-  - 出力結果
-  
   ```shell
-  NAME                              READY   STATUS    RESTARTS   AGE
-  hello-minikube-8696bfd944-t7b98   1/1     Running   0          8h
+  kubectl get pods
   ```
 
-- 
+  - 出力結果 | STATUS が `Running` であれば準備 OK  
+  
+    ```shell
+    NAME                              READY   STATUS    RESTARTS   AGE
+    hello-minikube-8696bfd944-t7b98   1/1     Running   0          43s
+    ```
+
+- 公開した Service の URL を変数 `$URL` へ保存する  
+
+  ```shell
+  export URL=$(minikube service hello-minikube --url)
+  ```
+
+- `curl` コマンドを用いて Service 情報を取得する  
+
+  ```shell
+  curl $URL -p 8080
+  ```
+
+  - 出力結果  
+
+    ```shell
+    Hostname: hello-minikube-8696bfd944-t7b98
+
+    Pod Information:
+            -no pod information available-
+
+    Server values:
+            server_version=nginx: 1.13.3 - lua: 10008
+
+    Request Information:
+            client_address=10.244.0.1
+            method=GET
+            real path=/
+            query=
+            request_version=1.1
+            request_scheme=http
+            request_uri=http://192.168.49.2:8080/
+
+    Request Headers:
+            accept=*/*
+            host=192.168.49.2:32496
+            user-agent=curl/7.81.0
+
+    Request Body:
+            -no body in request-
+    ```
+
+- 使い終わった Service を削除する  
+
+  ```shell
+  kubectl delete services hello-minikube
+  ```
+
+- 同様に Deployment の削除  
+
+  ```shell
+  kubectl delete deployment hello-minikube
+  ```
+
+- Minikube の停止は次のコマンドで可能  
+
+  ```shell
+  minikube stop
+  ```
+
+- Minikube クラスタの削除は以下のコマンドで可能  
+
+  ```shell
+  minikube delete
+  ```

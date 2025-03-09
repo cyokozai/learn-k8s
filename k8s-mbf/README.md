@@ -127,11 +127,23 @@ Docker でコンテナを作成するには、コンテナの元となるイメ�
   docker logs --tail 1000 -f some-nginx
   ```
 
+- コンテナの停止を行う
+
+  ```shell
+  docker stop some-nginx
+  ```
+
 - 使い終わったコンテナは次のコマンドで削除する  
   ⚠️ ボリュームの永続化が行われていない場合、コンテナの終了とともに内部のデータはすべて削除されるので注意すること
 
   ```shell
-  docker 
+  docker rm some-nginx
+  ```
+
+- 不要な場合は適宜イメージも削除する
+
+  ```shell
+  docker rmi nginx:latest
   ```
 
 ## Chapter 1.2 作ってみよう Kubernetes | Kubernetes クラスタを作ってみる
@@ -183,4 +195,22 @@ minikube の詳細なインストール方法については[公式サイト](ht
     ```shell
     CURRENT   NAME       CLUSTER    AUTHINFO   NAMESPACE
     *         minikube   minikube   minikube   default
+    ```
+
+- コンテキストを `minikube` に設定する
+
+  ```shell
+  kubectl config use-context minikube
+  ```
+
+- 現在設定されているコンテキストを確認する
+
+  ```shell
+  kubectl config current-context
+  ```
+
+  - 出力結果
+
+    ```shell
+    minikube
     ```

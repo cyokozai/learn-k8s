@@ -13,6 +13,9 @@
       - [Docker のインストール (Ubuntu)](#docker-のインストール-ubuntu)
       - [Docker の基本コマンド](#docker-の基本コマンド)
     - [Docker image と　Dockerfile](#docker-image-とdockerfile)
+      - [Docker image](#docker-image)
+      - [Docker Hub](#docker-hub)
+      - [Dockerfile](#dockerfile)
   - [Chapter 1.2 作ってみよう Kubernetes | Kubernetes クラスタを作ってみる](#chapter-12-作ってみよう-kubernetes--kubernetes-クラスタを作ってみる)
     - [Minikube の環境構築からクラスタのデプロイまで](#minikube-の環境構築からクラスタのデプロイまで)
       - [Minikube のインストール](#minikube-のインストール)
@@ -111,19 +114,21 @@ Docker を使うことで、どの OS や環境でコンテナを実行しても
 
 ### Docker image と　Dockerfile
 
-                                                                                                                                                                                                                                                                                                                                                    #### Docker image  
+#### Docker image  
 
 Docker でコンテナを作成するには、コンテナの元となるイメージ (image) を取得する必要がある。  
 例えば、`nginx` のコンテナをデプロイする場面を考える。  
-`nginx` のイメージは Nginx 公式が Docker Hub にイメージを公開しているものを使用する。  
+`nginx` のイメージは Nginx 公式が Docker Hub にイメージを公開しているものを使用することができる。  
+このイメージの中には Nginx が動作するために必要な全てのファイルが含まれている。  
 
 - 公式の Docker Hub に掲載している方法でイメージのダウンロードからコンテナのデプロイまでを行うことができる  
 
   ```shell
-  docker run --name some-nginx -v /some/content:/usr/share/nginx/html:ro -d nginx
+  docker run -d --name my-nginx -p 8080:80 nginx
   ```
 
-- `neignx` コンテナが起動したらコンテナの様子をログから確認する  
+- `http://localhost:8080` からアクセス可能なので、コンテナが起動しているか確認する  
+- `neignx` コンテナの様子をログから確認する  
 
   ```shell
   docker logs --tail 1000 -f some-nginx
@@ -142,11 +147,41 @@ Docker でコンテナを作成するには、コンテナの元となるイメ�
   docker rm some-nginx
   ```
 
+- 現在のローカルにある Docker イメージを確認する  
+
+  ```shell
+  docker images
+  ```
+
 - 不要な場合は適宜イメージも削除する  
 
   ```shell
   docker rmi nginx:latest
   ```
+
+#### Docker Hub
+
+[Docker Hub](https://hub.docker.com/) は Docker の公式リポジトリで、様々なイメージを提供している。  
+Docker Hub にあるイメージを取得するには、以下のように `docker pull` を実行する。  
+
+- Ubuntu 24.04 LTS のイメージを取得する  
+
+  ```shell
+  docker pull ubuntu
+  ```
+  
+- 取得したイメージからコンテナを作成する  
+
+  ```shell
+  docker run -it ubuntu bash
+  ```
+
+  - `docker run` 実行時、ローカルにイメージが存在しない場合は自動で Docker Hub からイメージをダウンロードする  
+
+#### Dockerfile
+
+Dockerfile はオリジナルの Docker イメージを作成するためのレシピである。  
+
 
 ## Chapter 1.2 作ってみよう Kubernetes | Kubernetes クラスタを作ってみる
 

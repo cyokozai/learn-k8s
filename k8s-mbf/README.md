@@ -306,8 +306,33 @@ Minikube の詳細なインストール方法については[公式サイト](ht
   minikube stop
   ```
 
+  - 出力結果
+
+    ```shell
+    ✋  Stopping node "minikube"  ...
+    🛑  Powering off "minikube" via SSH ...
+    🛑  1 node stopped.
+    ```
+
 - Minikube クラスタの削除は以下のコマンドで可能  
 
   ```shell
   minikube delete
   ```
+
+  - 出力結果
+
+    ```shell
+    🔥  Deleting "minikube" in docker ...
+    🔥  Deleting container "minikube" ...
+    🔥  Removing /home/cyokozai/.minikube/machines/minikube ...
+    💀  Removed all traces of the "minikube" cluster.
+    ```
+  
+  - Docker からも削除されたことを確認する  
+
+    ```shell
+    $ docker ps
+    CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
+    ```
+

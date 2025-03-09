@@ -15,8 +15,9 @@
     - [Docker image と　Dockerfile](#docker-image-とdockerfile)
       - [Docker image](#docker-image)
   - [Chapter 1.2 作ってみよう Kubernetes | Kubernetes クラスタを作ってみる](#chapter-12-作ってみよう-kubernetes--kubernetes-クラスタを作ってみる)
-    - [minikube の環境構築からクラスタのデプロイまで](#minikube-の環境構築からクラスタのデプロイまで)
-      - [](#)
+    - [Minikube の環境構築からクラスタのデプロイまで](#minikube-の環境構築からクラスタのデプロイまで)
+      - [Minikube のインストール](#minikube-のインストール)
+      - [Minikube クラスタに `echoserver` をデプロイする](#minikube-クラスタに-echoserver-をデプロイする)
 
 ## Chapter 1.1 作ってみよう Kubernetes | Doker コンテナを作ってみる
 
@@ -149,11 +150,13 @@ Docker でコンテナを作成するには、コンテナの元となるイメ�
 
 ## Chapter 1.2 作ってみよう Kubernetes | Kubernetes クラスタを作ってみる
 
-### minikube の環境構築からクラスタのデプロイまで
+### Minikube の環境構築からクラスタのデプロイまで
 
-minikube は Kubernetes をローカル環境で手軽にシミュレーションできる便利なツールのひとつである。  
-minikube の詳細なインストール方法については[公式サイト](https://minikube.sigs.k8s.io/docs/start/?arch=%2Flinux%2Fx86-64%2Fstable%2Fbinary+download)を参照されたい。  
+Minikube は Kubernetes をローカル環境で手軽にシミュレーションできる便利なツールのひとつである。  
+Minikube の詳細なインストール方法については[公式サイト](https://minikube.sigs.k8s.io/docs/start/?arch=%2Flinux%2Fx86-64%2Fstable%2Fbinary+download)を参照されたい。  
 以下は今回の学習で使用する環境構築について解説する。  
+
+#### Minikube のインストール
 
 - LinuxOS (x86) 環境では、以下のコマンドを使ってバイナリをダウンロードする  
 
@@ -161,7 +164,7 @@ minikube の詳細なインストール方法については[公式サイト](ht
   curl -LO https://github.com/kubernetes/minikube/releases/latest/download/minikube-linux-amd64
   ```
 
-- minikube のインストールを実行する  
+- Minikube のインストールを実行する  
 
   ```shell
   sudo install minikube-linux-amd64 /usr/local/bin/minikube
@@ -173,7 +176,7 @@ minikube の詳細なインストール方法については[公式サイト](ht
   rm minikube-linux-amd64
   ```
 
-- minikube を起動する  
+- Minikube を起動する  
 
   ```shell
   minikube start
@@ -198,22 +201,50 @@ minikube の詳細なインストール方法については[公式サイト](ht
     *         minikube   minikube   minikube   default
     ```
 
-- コンテキストを `minikube` に設定する
+- コンテキストを `minikube` に設定する  
 
   ```shell
   kubectl config use-context minikube
   ```
 
-- 現在設定されているコンテキストを確認する
+- 現在設定されているコンテキストを確認する  
 
   ```shell
   kubectl config current-context
   ```
 
-  - 出力結果
+  - 出力結果  
 
     ```shell
     minikube
     ```
 
-#### 
+#### Minikube クラスタに `echoserver` をデプロイする
+
+- Minikube クラスタにサンプル用のアプリ `echoserver` をデプロイする  
+  Deployment は `hello-minikube` で作成します  
+
+  ```shell
+  kubectl create deployment hello-minikube --image=registry.k8s.io/echoserver:1.10
+  ```
+
+- Service を作成し 8080 番ポートで `hello-minikube` を公開する
+
+  ```shell
+  kubectl expose deployment hello-minikube --type=NodePort --port=8080
+  ```
+
+- Podが稼働していることを確認する
+
+```shell
+kubectl get pods
+```
+
+  - 出力結果
+  
+  ```shell
+  NAME                              READY   STATUS    RESTARTS   AGE
+  hello-minikube-8696bfd944-t7b98   1/1     Running   0          8h
+  ```
+
+- 

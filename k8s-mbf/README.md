@@ -13,11 +13,11 @@
       - [Docker のインストール (Ubuntu)](#docker-のインストール-ubuntu)
       - [Docker の基本コマンド](#docker-の基本コマンド)
     - [Docker image と　Dockerfile](#docker-image-とdockerfile)
-      - [Docker image](#docker-image)
   - [Chapter 1.2 作ってみよう Kubernetes | Kubernetes クラスタを作ってみる](#chapter-12-作ってみよう-kubernetes--kubernetes-クラスタを作ってみる)
     - [Minikube の環境構築からクラスタのデプロイまで](#minikube-の環境構築からクラスタのデプロイまで)
       - [Minikube のインストール](#minikube-のインストール)
       - [Minikube クラスタに `echoserver` をデプロイする](#minikube-クラスタに-echoserver-をデプロイする)
+
 
 ## Chapter 1.1 作ってみよう Kubernetes | Doker コンテナを作ってみる
 
@@ -111,38 +111,38 @@ Docker を使うことで、どの OS や環境でコンテナを実行しても
 
 ### Docker image と　Dockerfile
 
-#### Docker image  
+                                                                                                                                                                                                                                                                                                                                                    #### Docker image  
 
-Docker でコンテナを作成するには、コンテナの元となるイメージ (image) を取得する必要があります。  
+Docker でコンテナを作成するには、コンテナの元となるイメージ (image) を取得する必要がある。  
 例えば、`nginx` のコンテナをデプロイする場面を考える。  
 `nginx` のイメージは Nginx 公式が Docker Hub にイメージを公開しているものを使用する。  
 
-- 公式の Docker Hub に掲載している方法でイメージのダウンロードからコンテナのデプロイまでを行うことができる
+- 公式の Docker Hub に掲載している方法でイメージのダウンロードからコンテナのデプロイまでを行うことができる  
 
   ```shell
   docker run --name some-nginx -v /some/content:/usr/share/nginx/html:ro -d nginx
   ```
 
-- `neignx` コンテナが起動したらコンテナの様子をログから確認する
+- `neignx` コンテナが起動したらコンテナの様子をログから確認する  
 
   ```shell
   docker logs --tail 1000 -f some-nginx
   ```
 
-- コンテナの停止を行う
+- コンテナの停止を行う  
 
   ```shell
   docker stop some-nginx
   ```
 
 - 使い終わったコンテナは次のコマンドで削除する  
-  ⚠️ ボリュームの永続化が行われていない場合、コンテナの終了とともに内部のデータはすべて削除されるので注意すること
+  ⚠️ ボリュームの永続化が行われていない場合、コンテナの終了とともに内部のデータはすべて削除されるので注意すること  
 
   ```shell
   docker rm some-nginx
   ```
 
-- 不要な場合は適宜イメージも削除する
+- 不要な場合は適宜イメージも削除する  
 
   ```shell
   docker rmi nginx:latest

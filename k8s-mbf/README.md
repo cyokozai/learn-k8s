@@ -183,9 +183,9 @@ Docker Hub にあるイメージを取得するには、以下のように `dock
 Dockerfile はオリジナルの Docker イメージを作成するためのレシピである。  
 例えば、自分で作成したアプリをコンテナでデプロイすることを考える。  
 その場合はほぼ確実に自前で Dockerfile を書き、アプリ用の Docker イメージを作成する必要がある。  
-試しに、[`./ch-01` ディレクトリ](./ch-01)にある Dockerfile と Go 言語で書かれたサンプルアプリを使って自作アプリ用のイメージを作成する。  
+試しに、[`./ch-01/myapp-image` ディレクトリ](./ch-01)にある Dockerfile と Go 言語で書かれたサンプルアプリを使って自作アプリ用のイメージを作成する。  
 
-- `cd ./ch-01` で作業ディレクトリを移動し、`ls` コマンドで以下のファイルが存在することを確認する  
+- `ls ./ch-01/myapp-image` コマンドで以下のファイルが存在することを確認する  
 
   ```shell
   Dockerfile  README.md  docker-compose.yaml  testapp.go
@@ -193,37 +193,54 @@ Dockerfile はオリジナルの Docker イメージを作成するためのレ�
 
 - `testapp.go` と `Dockerfile` の中を確認する  
 
-<details><summary>testapp.go</summary><div>
+  <details><summary>testapp.go</summary><div>
 
-```go
+  ```go
+  package testapp
 
-```
+  import (
+    "fmt"
+    "net/http"
+  )
 
-</div></details>
+  func handler(w http.ResponseWriter, r *http.Request) {
+    fmt.Fprintln(w, "Hello, Docker with Go!")
+  }
 
-<details><summary>Dockerfile</summary><div>
+  func main() {
+    http.HandleFunc("/", handler)
+    fmt.Println("Server is running on port 8080...")
+    http.ListenAndServe(":8080", nil)
+  }
+  ```
 
-```Dockerfile
-# 最新のGoの公式イメージをベースにする
-FROM golang:latest
+  </div></details>
 
-# 作業ディレクトリを作成
-WORKDIR /app
+  <details><summary>Dockerfile</summary><div>
 
-# 必要なファイルをコピー
-COPY main.go .
+  ```Dockerfile
+  # 最新のGoの公式イメージをベースにする
+  FROM golang:latest
 
-# Goのビルド（バイナリを作成）
-RUN go build -o app main.go
+  # 作業ディレクトリを作成
+  WORKDIR /app
 
-# コンテナのポートを開放
-EXPOSE 8080
+  # 必要なファイルをコピー
+  COPY testapp.go .
 
-# 実行するコマンド
-CMD ["./app"]
-```
+  # Goのビルド（バイナリを作成）
+  RUN go build -o app testapp.go
 
-</div></details>
+  # コンテナのポートを開放
+  EXPOSE 8080
+
+  # 実行するコマンド
+  CMD ["./app"]
+  ```
+
+  </div></details>
+
+- 
 
 ## Chapter 1.2 作ってみよう Kubernetes | Kubernetes クラスタを作ってみる
 

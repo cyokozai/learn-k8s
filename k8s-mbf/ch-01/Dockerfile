@@ -1,5 +1,5 @@
-# Goの公式イメージをベースにする
-FROM golang:1.20
+# 最新版のGoの公式イメージをベースにする
+FROM golang:latest
 
 # 作業ディレクトリを作成
 WORKDIR /app

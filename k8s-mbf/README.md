@@ -182,9 +182,48 @@ Docker Hub にあるイメージを取得するには、以下のように `dock
 
 Dockerfile はオリジナルの Docker イメージを作成するためのレシピである。  
 例えば、自分で作成したアプリをコンテナでデプロイすることを考える。  
-その場合はほぼ確実に自前で Dockerfile を書き、アプリ用の Docker イメージを作成する必要がある。
+その場合はほぼ確実に自前で Dockerfile を書き、アプリ用の Docker イメージを作成する必要がある。  
+試しに、[`./ch-01` ディレクトリ](./ch-01)にある Dockerfile と Go 言語で書かれたサンプルアプリを使って自作アプリ用のイメージを作成する。  
 
+- `cd ./ch-01` で作業ディレクトリを移動し、`ls` コマンドで以下のファイルが存在することを確認する  
 
+  ```shell
+  Dockerfile  README.md  docker-compose.yaml  testapp.go
+  ```
+
+- `testapp.go` と `Dockerfile` の中を確認する  
+
+<details><summary>testapp.go</summary><div>
+
+```go
+
+```
+
+</div></details>
+
+<details><summary>Dockerfile</summary><div>
+
+```Dockerfile
+# 最新のGoの公式イメージをベースにする
+FROM golang:latest
+
+# 作業ディレクトリを作成
+WORKDIR /app
+
+# 必要なファイルをコピー
+COPY main.go .
+
+# Goのビルド（バイナリを作成）
+RUN go build -o app main.go
+
+# コンテナのポートを開放
+EXPOSE 8080
+
+# 実行するコマンド
+CMD ["./app"]
+```
+
+</div></details>
 
 ## Chapter 1.2 作ってみよう Kubernetes | Kubernetes クラスタを作ってみる
 

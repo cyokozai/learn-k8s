@@ -181,6 +181,9 @@ Docker Hub にあるイメージを取得するには、以下のように `dock
 #### Dockerfile
 
 Dockerfile はオリジナルの Docker イメージを作成するためのレシピである。  
+例えば、自分で作成したアプリをコンテナでデプロイすることを考える。  
+その場合はほぼ確実に自前で Dockerfile を書き、アプリ用の Docker イメージを作成する必要がある。
+
 
 
 ## Chapter 1.2 作ってみよう Kubernetes | Kubernetes クラスタを作ってみる

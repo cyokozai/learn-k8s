@@ -197,7 +197,7 @@ Dockerfile はオリジナルの Docker イメージを作成するためのレ�
 
   ```go
   package testapp
-
+  
   import (
     "fmt"
     "net/http"

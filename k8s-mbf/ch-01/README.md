@@ -5,10 +5,10 @@
 
 ## Dokerfile
 
-- `docker build`
+- `docker build` を実行してイメージを作成する
 
   ```shell
-  docker build ./ch-01/myapp/ --tag testapp:1.0.0
+  docker build ./myapp/ --tag testapp:1.0.0
   ```
 
 - `docker images` を実行して自作イメージが作成されたことを確認する  

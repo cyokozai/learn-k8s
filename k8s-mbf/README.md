@@ -24,6 +24,8 @@
 
 ## Chapter 1.1 作ってみよう Kubernetes | Doker コンテナを作ってみる
 
+リポジトリ内の `./k8s-mbf/ch-01` ディレクトリへ移動していることを前提にコマンドなどの説明を行います。  
+
 ### コンテナ
 
 コンテナは**アプリケーションとその実行環境をパッケージ化したもの**である。  
@@ -183,9 +185,9 @@ Docker Hub にあるイメージを取得するには、以下のように `dock
 Dockerfile はオリジナルの Docker イメージを作成するためのレシピである。  
 例えば、自分で作成したアプリをコンテナでデプロイすることを考える。  
 その場合はほぼ確実に自前で Dockerfile を書き、アプリ用の Docker イメージを作成する必要がある。  
-試しに、[`./ch-01/myapp-image` ディレクトリ](./ch-01)にある Dockerfile と Go 言語で書かれたサンプルアプリを使って自作アプリ用のイメージを作成する。  
+試しに、[`./ch-01/myapp` ディレクトリ](./ch-01)にある Dockerfile と Go 言語で書かれたサンプルアプリを使って自作アプリ用のイメージを作成する。  
 
-- `ls ./ch-01/myapp-image` コマンドで以下のファイルが存在することを確認する  
+- `ls ./ch-01/myapp` コマンドで以下のファイルが存在することを確認する  
 
   ```shell
   Dockerfile  README.md  docker-compose.yaml  testapp.go
@@ -240,7 +242,18 @@ Dockerfile はオリジナルの Docker イメージを作成するためのレ�
 
   </div></details>
 
-- 
+- `docker build` を実行してイメージを作成する  
+
+  ```shell
+  docker build ./myapp/ --tag testapp:1.0.0
+  ```
+
+- `docker images` を実行して自作イメージが作成されたことを確認する  
+
+  ```shell
+  REPOSITORY       TAG       IMAGE ID       CREATED        SIZE
+  testapp          1.0.0     ec0cb3683811   20 hours ago   938MB
+  ```
 
 ## Chapter 1.2 作ってみよう Kubernetes | Kubernetes クラスタを作ってみる
 

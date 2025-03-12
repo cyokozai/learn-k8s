@@ -198,7 +198,7 @@ Dockerfile はオリジナルの Docker イメージを作成するためのレ�
   <details><summary>testapp.go</summary><div>
 
   ```go
-  package testapp
+  package main
   
   import (
     "fmt"
@@ -223,6 +223,12 @@ Dockerfile はオリジナルの Docker イメージを作成するためのレ�
   ```Dockerfile
   # 最新のGoの公式イメージをベースにする
   FROM golang:latest
+
+  # 環境変数を設定
+  # OSをLinuxに設定
+  ENV GOOS=linux
+  # アーキテクチャをamd64に設定
+  ENV GOARCH=amd64
 
   # 作業ディレクトリを作成
   WORKDIR /app
@@ -260,6 +266,18 @@ Dockerfile はオリジナルの Docker イメージを作成するためのレ�
   ```shell
   docker run -d --name my-go-app -p 8080:8080 testapp:1.0.0
   ```
+
+- 疎通確認を行う  
+
+  ```shell
+  curl http://localhost:8080
+  ```
+
+  - 出力結果
+  
+    ```shell
+    Hello, Docker with Go!
+    ```
 
 ## Chapter 1.2 作ってみよう Kubernetes | Kubernetes クラスタを作ってみる
 

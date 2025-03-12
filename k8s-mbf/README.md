@@ -231,7 +231,7 @@ Dockerfile はオリジナルの Docker イメージを作成するためのレ�
   COPY testapp.go .
 
   # Goのビルド（バイナリを作成）
-  RUN go build -o app testapp.go
+  RUN go build -o app testapp.go && chmod +x app
 
   # コンテナのポートを開放
   EXPOSE 8080
@@ -253,6 +253,12 @@ Dockerfile はオリジナルの Docker イメージを作成するためのレ�
   ```shell
   REPOSITORY       TAG       IMAGE ID       CREATED        SIZE
   testapp          1.0.0     ec0cb3683811   20 hours ago   938MB
+  ```
+
+- 自作イメージを使ってコンテナをデプロイする  
+
+  ```shell
+  docker run -d --name my-go-app -p 8080:8080 testapp:1.0.0
   ```
 
 ## Chapter 1.2 作ってみよう Kubernetes | Kubernetes クラスタを作ってみる

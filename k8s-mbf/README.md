@@ -18,10 +18,8 @@
       - [Dockerfile](#dockerfile)
   - [Chapter 1.2 作ってみよう Kubernetes | Kubernetes クラスタを作ってみる](#chapter-12-作ってみよう-kubernetes--kubernetes-クラスタを作ってみる)
     - [Kubernetes](#kubernetes)
-      - [Reconciliation Loop (調整ループ)](#reconciliation-loop-調整ループ)
-      - [Infrastructure as Code (IaC)](#infrastructure-as-code-iac)
-      - [Kubernetes API](#kubernetes-api)
-      - [Minikube のインストール](#minikube-のインストール)
+      - [Kubernetes アーキテクチャ](#kubernetes-アーキテクチャ)
+      - [Kubernetes のインストール](#kubernetes-のインストール)
       - [Minikube クラスタに `echoserver` をデプロイする](#minikube-クラスタに-echoserver-をデプロイする)
 
 ## Chapter 1.1 作ってみよう Kubernetes | Doker コンテナを作ってみる
@@ -45,9 +43,11 @@ Docker の登場以来、コンテナ仮想化技術を採用した開発・運�
 
 コンテナとよく比較される VM は、ハードウェアや OS を含めて仮想化する技術である。  
 コンテナはそれ自体は OS を含まず、ホストの Kernel を共有する。  
-それゆえ、リソースの消費が少なく起動時間も早いことからコンテナの採用率が増加していると考えられる。  
+それゆえ、リソースの消費が少なく起動時間も早いことからコンテナの採用率が増加していると考えられる[^1]。  
 
 ![image1](./images/vmcontainer.png)
+
+[^1]: https://kubernetes.io/ja/docs/concepts/overview/#%E9%81%8E%E5%8E%BB%E3%82%92%E6%8C%AF%E3%82%8A%E8%BF%94%E3%81%A3%E3%81%A6%E3%81%BF%E3%82%8B%E3%81%A8
 
 #### マイクロサービスアーキテクチャとコンテナの相性が良い
 
@@ -296,9 +296,9 @@ Docker の登場により、エンジニアはコンテナを使ったアプリ�
 - どのノードでコンテナをデプロイすべきか判断しなければならない
 
 これらの問題を解決する手段のひとつが [Kubernetes](https://kubernetes.io/) である。  
-Kubernetes はコンテナオーケストレーションエンジンとして以下の強力な機能を兼ね備えている。  
+Kubernetes はコンテナオーケストレーションエンジンとして以下の強力な機能を兼ね備えている[^2]。  
 
-#### Reconciliation Loop (調整ループ)
+**Reconciliation Loop (調整ループ)**
 
 Kubernetes は宣言型のインフラツールである。  
 予め**システムの望ましい状態 (Desired State)** を定義することで、Kubernetes は宣言通りの状態を保とうとする。  
@@ -306,7 +306,7 @@ Kubernetes は宣言型のインフラツールである。
 一方で、Ansible などの手続き型のインフラツールでは、やるべきことを順番通りに記述して実行するシンプルな構成が特徴である。  
 しかし、障害時のエラーハンドリングも考慮して記述する必要があるため、予めエラーを予測して定義する必要がある。  
 
-#### Infrastructure as Code (IaC)
+**Infrastructure as Code (IaC)**
 
 [Infrastructure as Code (IaC)](https://aws.amazon.com/what-is/iac/?nc1=h_ls) はソースコードでインフラの記述し、管理及びプロビジョニングを行うことである。  
 Kubernetes では YAML ファイルを利用してクラスタの管理からアプリケーションの管理までを行うことができる。  
@@ -314,7 +314,7 @@ Kubernetes では YAML ファイルを利用してクラスタの管理からア
 IaC の特徴は、コード化によるインフラの Git 管理が可能になった点が挙げられる。  
 これにより、リポジトリの差分を参照したり、GitOps の考え方である **default リポジトリに保存されたマニフェストが常に最新である**という管理方法を実践できる。  
 
-#### Kubernetes API
+**Kubernetes API**
 
 Kubernetes にはコンテナオーケストレーションを実現するための様々な API が定義されている。  
 マニフェストに書かれた情報は、常に Kubernetes では一意の宣言になる。  
@@ -355,7 +355,16 @@ Docker に限らず、 VirtualBoxやHyper-Vなどで動作することができ�
 | **kind** | 軽量、CI/CD 向き | 実運用には向かない | **開発・テスト環境** |
 | **minikube** | シンプル、ローカルで動作 | シングルノード、パフォーマンス低い | **学習・開発環境** |
 
-#### Minikube のインストール
+[^2]: https://kubernetes.io/ja/docs/concepts/overview/#why-you-need-kubernetes-and-what-can-it-do
+
+#### Kubernetes アーキテクチャ
+
+Kubernetes のアーキテクチャについて簡単に説明する[^3]。  
+
+
+[^3]: https://kubernetes.io/ja/docs/concepts/overview/components/
+
+#### Kubernetes のインストール
 
 今回の学習では Minikube を用いる。  
 Minikube の詳細なインストール方法については[公式サイト](https://minikube.sigs.k8s.io/docs/start/?arch=%2Flinux%2Fx86-64%2Fstable%2Fbinary+download)を参照されたい。  

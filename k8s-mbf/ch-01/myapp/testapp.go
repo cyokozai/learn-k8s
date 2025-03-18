@@ -4,6 +4,8 @@ import (
 	
 	"fmt"
 
+	"log"
+
 	"net/http"
 
 )
@@ -18,8 +20,10 @@ func main() {
 
 	http.HandleFunc("/", handler)
 
-	fmt.Println("Server is running on port 8080...")
-
-	http.ListenAndServe(":8080", nil)
+	log.Println("Server is running on port 8080...")
+	err := http.ListenAndServe(":8080", nil)
+	if err != nil {
+		log.Fatal("ListenAndServe: ", err)
+	}
 
 }

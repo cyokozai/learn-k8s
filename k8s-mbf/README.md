@@ -361,6 +361,7 @@ Docker に限らず、 VirtualBoxやHyper-Vなどで動作することができ�
 
 Kubernetes のアーキテクチャについて簡単に説明する[^3]。  
 
+![components](./images/k8scomponents.png)
 
 [^3]: https://kubernetes.io/ja/docs/concepts/overview/components/
 

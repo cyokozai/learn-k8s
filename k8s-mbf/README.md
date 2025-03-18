@@ -12,10 +12,7 @@
     - [Docker](#docker)
       - [Docker のインストール (Ubuntu)](#docker-のインストール-ubuntu)
       - [Docker の基本コマンド](#docker-の基本コマンド)
-    - [Docker image と Dockerfile](#docker-image-と-dockerfile)
-      - [Docker image](#docker-image)
-      - [Docker Hub](#docker-hub)
-      - [Dockerfile](#dockerfile)
+      - [Docker image と Dockerfile](#docker-image-と-dockerfile)
   - [Chapter 1.2 作ってみよう Kubernetes | Kubernetes クラスタを作ってみる](#chapter-12-作ってみよう-kubernetes--kubernetes-クラスタを作ってみる)
     - [Kubernetes](#kubernetes)
       - [Kubernetes アーキテクチャ](#kubernetes-アーキテクチャ)
@@ -116,9 +113,9 @@ Docker を使うことで、どの OS や環境でコンテナを実行しても
 
 </div></details>
 
-### Docker image と Dockerfile
+#### Docker image と Dockerfile
 
-#### Docker image  
+**Docker image**  
 
 Docker でコンテナを作成するには、コンテナの元となるイメージ (image) を取得する必要がある。  
 例えば、`nginx` のコンテナをデプロイする場面を考える。  
@@ -163,7 +160,7 @@ Docker でコンテナを作成するには、コンテナの元となるイメ�
   docker rmi nginx:latest
   ```
 
-#### Docker Hub
+**Docker Hub**  
 
 [Docker Hub](https://hub.docker.com/) は Docker の公式リポジトリで、様々なイメージを提供している。  
 Docker Hub にあるイメージを取得するには、以下のように `docker pull` を実行する。  
@@ -182,7 +179,7 @@ Docker Hub にあるイメージを取得するには、以下のように `dock
 
   - `docker run` 実行時、ローカルにイメージが存在しない場合は自動で Docker Hub からイメージをダウンロードする  
 
-#### Dockerfile
+**Dockerfile**  
 
 Dockerfile はオリジナルの Docker イメージを作成するためのレシピである。  
 例えば、自分で作成したアプリをコンテナでデプロイすることを考える。  

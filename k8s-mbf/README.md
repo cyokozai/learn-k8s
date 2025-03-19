@@ -318,7 +318,20 @@ Kubernetes にはコンテナオーケストレーションを実現するため
 したがって、ベアメタルなどのインフラレイヤの抽象化が行われ、アプリケーションを管理している間、インフラレイヤに関係する固有の情報を機にする必要がなくなる。  
 これを**所掌の分離**という。  
 
----
+[^2]: https://kubernetes.io/ja/docs/concepts/overview/#why-you-need-kubernetes-and-what-can-it-do
+
+#### Kubernetes アーキテクチャ
+
+Kubernetes のアーキテクチャについて簡単に説明する[^3]。  
+
+![components](./images/k8scomponents.png)
+
+[^3]: https://kubernetes.io/ja/docs/concepts/overview/components/
+
+#### Kubernetes のインストール
+
+ここからは Kubernetes を実際に触っていく。  
+その前に、代表的な Kubernetes 環境についてそれぞれ比較する。  
 
 **ベアメタル**  
 
@@ -343,8 +356,6 @@ Docker 上で完結して動作することが可能であり、軽量な環境�
 Minikube は Kubernetes をローカル環境で手軽にシミュレーションできる便利なツールのひとつである。  
 Docker に限らず、 VirtualBoxやHyper-Vなどで動作することができ、ドライバの選択肢が広いのが特徴である。
 
----
-
 | 環境 | メリット | デメリット | 用途 |
 |---|---|---|---|
 | **ベアメタル** | 高パフォーマンス、自由度が高い | 運用負担が大きい、スケールが難しい | **オンプレ本番環境** |
@@ -352,19 +363,10 @@ Docker に限らず、 VirtualBoxやHyper-Vなどで動作することができ�
 | **kind** | 軽量、CI/CD 向き | 実運用には向かない | **開発・テスト環境** |
 | **minikube** | シンプル、ローカルで動作 | シングルノード、パフォーマンス低い | **学習・開発環境** |
 
-[^2]: https://kubernetes.io/ja/docs/concepts/overview/#why-you-need-kubernetes-and-what-can-it-do
-
-#### Kubernetes アーキテクチャ
-
-Kubernetes のアーキテクチャについて簡単に説明する[^3]。  
-
-![components](./images/k8scomponents.png)
-
-[^3]: https://kubernetes.io/ja/docs/concepts/overview/components/
-
-#### Kubernetes のインストール
+---
 
 今回の学習では Minikube を用いる。  
+インストールの手順について解説する。  
 Minikube の詳細なインストール方法については[公式サイト](https://minikube.sigs.k8s.io/docs/start/?arch=%2Flinux%2Fx86-64%2Fstable%2Fbinary+download)を参照されたい。  
 
 - LinuxOS (x86) 環境では、以下のコマンドを使ってバイナリをダウンロードする  

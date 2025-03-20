@@ -323,6 +323,7 @@ Kubernetes にはコンテナオーケストレーションを実現するため
 #### Kubernetes アーキテクチャ
 
 Kubernetes のアーキテクチャについて簡単に説明する[^3]。  
+Kubernetesクラスターは、 コンテナ化されたアプリケーションを実行する、ノードと呼ばれるワーカーマシンの集合です。すべてのクラスターには少なくとも1つのワーカーノードがあります。  
 
 ![components](./images/k8scomponents.png)
 
@@ -546,4 +547,3 @@ Minikube の詳細なインストール方法については[公式サイト](ht
     $ docker ps
     CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
     ```
-

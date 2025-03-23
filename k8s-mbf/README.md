@@ -44,7 +44,7 @@ Docker の登場以来、コンテナ仮想化技術を採用した開発・運�
 
 ![image1](./images/vmcontainer.png)
 
-[^1]: https://kubernetes.io/ja/docs/concepts/overview/#%E9%81%8E%E5%8E%BB%E3%82%92%E6%8C%AF%E3%82%8A%E8%BF%94%E3%81%A3%E3%81%A6%E3%81%BF%E3%82%8B%E3%81%A8
+[^1]: <https://kubernetes.io/ja/docs/concepts/overview/#%E9%81%8E%E5%8E%BB%E3%82%92%E6%8C%AF%E3%82%8A%E8%BF%94%E3%81%A3%E3%81%A6%E3%81%BF%E3%82%8B%E3%81%A8>
 
 #### マイクロサービスアーキテクチャとコンテナの相性が良い
 
@@ -295,7 +295,7 @@ Docker の登場により、エンジニアはコンテナを使ったアプリ�
 これらの問題を解決する手段のひとつが [Kubernetes](https://kubernetes.io/) である。  
 Kubernetes はコンテナオーケストレーションエンジンとして以下の強力な機能を兼ね備えている[^2]。  
 
-**Reconciliation Loop (調整ループ)**
+**Reconciliation Loop (調整ループ)**  
 
 Kubernetes は宣言型のインフラツールである。  
 予め**システムの望ましい状態 (Desired State)** を定義することで、Kubernetes は宣言通りの状態を保とうとする。  
@@ -303,7 +303,7 @@ Kubernetes は宣言型のインフラツールである。
 一方で、Ansible などの手続き型のインフラツールでは、やるべきことを順番通りに記述して実行するシンプルな構成が特徴である。  
 しかし、障害時のエラーハンドリングも考慮して記述する必要があるため、予めエラーを予測して定義する必要がある。  
 
-**Infrastructure as Code (IaC)**
+**Infrastructure as Code (IaC)**  
 
 [Infrastructure as Code (IaC)](https://aws.amazon.com/what-is/iac/?nc1=h_ls) はソースコードでインフラの記述し、管理及びプロビジョニングを行うことである。  
 Kubernetes では YAML ファイルを利用してクラスタの管理からアプリケーションの管理までを行うことができる。  
@@ -311,14 +311,14 @@ Kubernetes では YAML ファイルを利用してクラスタの管理からア
 IaC の特徴は、コード化によるインフラの Git 管理が可能になった点が挙げられる。  
 これにより、リポジトリの差分を参照したり、GitOps の考え方である **default リポジトリに保存されたマニフェストが常に最新である**という管理方法を実践できる。  
 
-**Kubernetes API**
+**Kubernetes API**  
 
 Kubernetes にはコンテナオーケストレーションを実現するための様々な API が定義されている。  
 マニフェストに書かれた情報は、常に Kubernetes では一意の宣言になる。  
 したがって、ベアメタルなどのインフラレイヤの抽象化が行われ、アプリケーションを管理している間、インフラレイヤに関係する固有の情報を機にする必要がなくなる。  
 これを**所掌の分離**という。  
 
-[^2]: https://kubernetes.io/ja/docs/concepts/overview/#why-you-need-kubernetes-and-what-can-it-do
+[^2]: <https://kubernetes.io/ja/docs/concepts/overview/#why-you-need-kubernetes-and-what-can-it-do>
 
 #### Kubernetes アーキテクチャ
 
@@ -328,22 +328,22 @@ Kubernetesクラスターは、 コンテナ化されたアプリケーション
 
 ![components](./images/k8scomponents.png)
 
-- **ワーカーノード**  
+**ワーカーノード**  
 
-  ワーカーノードはPodをホストする役割を担う。  
-  Podとは、Kubernetes内で作成・管理できるコンピューティングの最小のデプロイ可能なユニットであり、アプリケーションのコンポーネントの要素でもある。  
-  ワーカーノードは、アプリケーションワークロードのコンポーネントであるPodをホストし、コンテナを実行する。  
+ワーカーノードはPodをホストする役割を担う。  
+Podとは、Kubernetes内で作成・管理できるコンピューティングの最小のデプロイ可能なユニットであり、アプリケーションのコンポーネントの要素でもある。  
+ワーカーノードは、アプリケーションワークロードのコンポーネントであるPodをホストし、コンテナを実行する。  
 
-  - kubelet  
-  - k-proxy  
-  - container runtime  
+- kubelet  
+- k-proxy  
+- container runtime  
 
-- **コントロールプレーン**  
+**コントロールプレーン**  
 
-  コントロールプレーンコンポーネントは、クラスターに関する全体的な決定(スケジューリングなど)を行う。  
-  また、クラスターイベントの検出および応答を処理する (たとえば、deploymentのreplicasフィールドが満たされていない場合に、新しい Pod を起動する等)。  
+コントロールプレーンコンポーネントは、クラスターに関する全体的な決定(スケジューリングなど)を行う。  
+また、クラスターイベントの検出および応答を処理する (たとえば、deploymentのreplicasフィールドが満たされていない場合に、新しい Pod を起動する等)。  
 
-[^3]: https://kubernetes.io/ja/docs/concepts/overview/components/
+[^3]: <https://kubernetes.io/ja/docs/concepts/overview/components/>
 
 #### Kubernetes のインストール
 
@@ -445,6 +445,43 @@ Minikube の詳細なインストール方法については[公式サイト](ht
 
     ```shell
     minikube
+    ```
+  
+  - `~/.kube/config` ファイルを確認する  
+
+    ```yaml
+    apiVersion: v1
+    clusters:
+    - cluster:
+        certificate-authority: /home/cyokozai/.minikube/ca.crt
+        extensions:
+        - extension:
+            last-update: Wed, 12 Mar 2025 20:55:34 UTC
+            provider: minikube.sigs.k8s.io
+            version: v1.35.0
+          name: cluster_info
+        server: https://192.168.49.2:8443
+      name: minikube
+    contexts:
+    - context:
+        cluster: minikube
+        extensions:
+        - extension:
+            last-update: Wed, 12 Mar 2025 20:55:34 UTC
+            provider: minikube.sigs.k8s.io
+            version: v1.35.0
+          name: context_info
+        namespace: default
+        user: minikube
+      name: minikube
+    current-context: minikube
+    kind: Config
+    preferences: {}
+    users:
+    - name: minikube
+      user:
+        client-certificate: /home/cyokozai/.minikube/profiles/minikube/client.crt
+        client-key: /home/cyokozai/.minikube/profiles/minikube/client.key
     ```
 
 #### Minikube クラスタに `echoserver` をデプロイする

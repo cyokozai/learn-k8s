@@ -18,6 +18,8 @@
       - [Kubernetes アーキテクチャ](#kubernetes-アーキテクチャ)
       - [Kubernetes のインストール](#kubernetes-のインストール)
       - [Minikube クラスタに `echoserver` をデプロイする](#minikube-クラスタに-echoserver-をデプロイする)
+  - [Chapter 1.3 作ってみよう Kubernetes | 全体像の説明](#chapter-13-作ってみよう-kubernetes--全体像の説明)
+  - [Chapter 1.4 作ってみよう Kubernetes | アプリケーションを Kubernetes クラスタ上に作る](#chapter-14-作ってみよう-kubernetes--アプリケーションを-kubernetes-クラスタ上に作る)
 
 ## Chapter 1.1 作ってみよう Kubernetes | Doker コンテナを作ってみる
 
@@ -600,3 +602,22 @@ Minikube の詳細なインストール方法については[公式サイト](ht
     $ docker ps
     CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
     ```
+
+## Chapter 1.3 作ってみよう Kubernetes | 全体像の説明  
+
+ここでは、本ハンズオンの全体像について紹介する。  
+
+- Chapter  1 | 基礎
+- Chapter  2 | 基礎
+- Chapter  3 | 全体像の説明
+- Chapter  4 | アプリケーションを動かす
+- Chapter  5 | `kubectl` を覚える
+- Chapter  6 | 様々なリソースを作って壊す
+- Chapter  7 | 復習
+- Chapter  8 | 復習
+- Chapter  9 | アーキテクチャを理解する
+- Chapter 10 | 開発ワークフロー
+- Chapter 11 | オブザーバビリティと監視
+- Chapter 12 | ゴール
+
+## Chapter 1.4 作ってみよう Kubernetes | アプリケーションを Kubernetes クラスタ上に作る  

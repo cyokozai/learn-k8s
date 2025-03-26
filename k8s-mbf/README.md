@@ -12,15 +12,14 @@
     - [Docker](#docker)
       - [Docker のインストール (Ubuntu)](#docker-のインストール-ubuntu)
       - [Docker の基本コマンド](#docker-の基本コマンド)
-    - [Docker image と　Dockerfile](#docker-image-とdockerfile)
-      - [Docker image](#docker-image)
-      - [Docker Hub](#docker-hub)
-      - [Dockerfile](#dockerfile)
+      - [Docker image と Dockerfile](#docker-image-と-dockerfile)
   - [Chapter 1.2 作ってみよう Kubernetes | Kubernetes クラスタを作ってみる](#chapter-12-作ってみよう-kubernetes--kubernetes-クラスタを作ってみる)
-    - [Minikube の環境構築からクラスタのデプロイまで](#minikube-の環境構築からクラスタのデプロイまで)
-      - [Minikube のインストール](#minikube-のインストール)
+    - [Kubernetes](#kubernetes)
+      - [Kubernetes アーキテクチャ](#kubernetes-アーキテクチャ)
+      - [Kubernetes のインストール](#kubernetes-のインストール)
       - [Minikube クラスタに `echoserver` をデプロイする](#minikube-クラスタに-echoserver-をデプロイする)
-
+  - [Chapter 1.3 作ってみよう Kubernetes | 全体像の説明](#chapter-13-作ってみよう-kubernetes--全体像の説明)
+  - [Chapter 1.4 作ってみよう Kubernetes | アプリケーションを Kubernetes クラスタ上に作る](#chapter-14-作ってみよう-kubernetes--アプリケーションを-kubernetes-クラスタ上に作る)
 
 ## Chapter 1.1 作ってみよう Kubernetes | Doker コンテナを作ってみる
 
@@ -43,9 +42,11 @@ Docker の登場以来、コンテナ仮想化技術を採用した開発・運�
 
 コンテナとよく比較される VM は、ハードウェアや OS を含めて仮想化する技術である。  
 コンテナはそれ自体は OS を含まず、ホストの Kernel を共有する。  
-それゆえ、リソースの消費が少なく起動時間も早いことからコンテナの採用率が増加していると考えられる。  
+それゆえ、リソースの消費が少なく起動時間も早いことからコンテナの採用率が増加していると考えられる[^1]。  
 
 ![image1](./images/vmcontainer.png)
+
+[^1]: <https://kubernetes.io/ja/docs/concepts/overview/#%E9%81%8E%E5%8E%BB%E3%82%92%E6%8C%AF%E3%82%8A%E8%BF%94%E3%81%A3%E3%81%A6%E3%81%BF%E3%82%8B%E3%81%A8>
 
 #### マイクロサービスアーキテクチャとコンテナの相性が良い
 
@@ -114,9 +115,9 @@ Docker を使うことで、どの OS や環境でコンテナを実行しても
 
 </div></details>
 
-### Docker image と　Dockerfile
+#### Docker image と Dockerfile
 
-#### Docker image  
+**Docker image**  
 
 Docker でコンテナを作成するには、コンテナの元となるイメージ (image) を取得する必要がある。  
 例えば、`nginx` のコンテナをデプロイする場面を考える。  
@@ -161,7 +162,7 @@ Docker でコンテナを作成するには、コンテナの元となるイメ�
   docker rmi nginx:latest
   ```
 
-#### Docker Hub
+**Docker Hub**  
 
 [Docker Hub](https://hub.docker.com/) は Docker の公式リポジトリで、様々なイメージを提供している。  
 Docker Hub にあるイメージを取得するには、以下のように `docker pull` を実行する。  
@@ -180,7 +181,7 @@ Docker Hub にあるイメージを取得するには、以下のように `dock
 
   - `docker run` 実行時、ローカルにイメージが存在しない場合は自動で Docker Hub からイメージをダウンロードする  
 
-#### Dockerfile
+**Dockerfile**  
 
 Dockerfile はオリジナルの Docker イメージを作成するためのレシピである。  
 例えば、自分で作成したアプリをコンテナでデプロイすることを考える。  
@@ -281,13 +282,111 @@ Dockerfile はオリジナルの Docker イメージを作成するためのレ�
 
 ## Chapter 1.2 作ってみよう Kubernetes | Kubernetes クラスタを作ってみる
 
-### Minikube の環境構築からクラスタのデプロイまで
+### Kubernetes
+
+> Kubernetes is an open source container orchestration engine for automating deployment, scaling, and management of containerized applications. The open source project is hosted by the Cloud Native Computing Foundation (CNCF).
+
+Docker の登場により、エンジニアはコンテナを使ったアプリケーションの開発を行うようになった。  
+その結果、大量のコンテナを運用・保守・管理することになる。  
+たとえば、**複数台のサーバでコンテナをデプロイ**するような場合、次のような問題が発生する。  
+
+- 障害時、コンテナごとに設定を行い復旧する必要がある
+- 様々なコンテナの仕様を個々に管理するのは大変
+- どのノードでコンテナをデプロイすべきか判断しなければならない
+
+これらの問題を解決する手段のひとつが [Kubernetes](https://kubernetes.io/) である。  
+Kubernetes はコンテナオーケストレーションエンジンとして以下の強力な機能を兼ね備えている[^2]。  
+
+**Reconciliation Loop (調整ループ)**  
+
+Kubernetes は宣言型のインフラツールである。  
+予め**システムの望ましい状態 (Desired State)** を定義することで、Kubernetes は宣言通りの状態を保とうとする。  
+**Desired State を達成するよう自動で動作する**仕組みを Reconciliation Loop と呼ぶ。  
+一方で、Ansible などの手続き型のインフラツールでは、やるべきことを順番通りに記述して実行するシンプルな構成が特徴である。  
+しかし、障害時のエラーハンドリングも考慮して記述する必要があるため、予めエラーを予測して定義する必要がある。  
+
+**Infrastructure as Code (IaC)**  
+
+[Infrastructure as Code (IaC)](https://aws.amazon.com/what-is/iac/?nc1=h_ls) はソースコードでインフラの記述し、管理及びプロビジョニングを行うことである。  
+Kubernetes では YAML ファイルを利用してクラスタの管理からアプリケーションの管理までを行うことができる。  
+特に、YAML ファイルのことをよくマニフェストファイルと呼ぶ。  
+IaC の特徴は、コード化によるインフラの Git 管理が可能になった点が挙げられる。  
+これにより、リポジトリの差分を参照したり、GitOps の考え方である **default リポジトリに保存されたマニフェストが常に最新である**という管理方法を実践できる。  
+
+**Kubernetes API**  
+
+Kubernetes にはコンテナオーケストレーションを実現するための様々な API が定義されている。  
+マニフェストに書かれた情報は、常に Kubernetes では一意の宣言になる。  
+したがって、ベアメタルなどのインフラレイヤの抽象化が行われ、アプリケーションを管理している間、インフラレイヤに関係する固有の情報を機にする必要がなくなる。  
+これを**所掌の分離**という。  
+
+[^2]: <https://kubernetes.io/ja/docs/concepts/overview/#why-you-need-kubernetes-and-what-can-it-do>
+
+#### Kubernetes アーキテクチャ
+
+Kubernetes のアーキテクチャについて簡単に説明する[^3]。  
+Kubernetesクラスターは、 コンテナ化されたアプリケーションを実行する、ノードと呼ばれるワーカーマシンの集合である。  
+すべてのクラスターには少なくとも1つのワーカーノードが存在する。  
+
+![components](./images/k8scomponents.png)
+
+**ワーカーノード**  
+
+ワーカーノードはPodをホストする役割を担う。  
+Podとは、Kubernetes内で作成・管理できるコンピューティングの最小のデプロイ可能なユニットであり、アプリケーションのコンポーネントの要素でもある。  
+ワーカーノードは、アプリケーションワークロードのコンポーネントであるPodをホストし、コンテナを実行する。  
+
+- kubelet  
+- k-proxy  
+- container runtime  
+
+**コントロールプレーン**  
+
+コントロールプレーンコンポーネントは、クラスターに関する全体的な決定(スケジューリングなど)を行う。  
+また、クラスターイベントの検出および応答を処理する (たとえば、deploymentのreplicasフィールドが満たされていない場合に、新しい Pod を起動する等)。  
+
+[^3]: <https://kubernetes.io/ja/docs/concepts/overview/components/>
+
+#### Kubernetes のインストール
+
+ここからは Kubernetes を実際に触っていく。  
+その前に、代表的な Kubernetes 環境についてそれぞれ比較する。  
+
+**ベアメタル**  
+
+物理サーバー上に Kubernetes クラスタを直接構築する方法。  
+OS やネットワーク、ストレージの管理を自分で行う必要がある。  
+高パフォーマンスかつクラウドプロバイダなどのベンダーロックインなしで Kubernetes クラスタを運用可能である。  
+しかし、その分運用コストが高く、また Kubespray などをはじめとする Kubernetes プロビジョニングツールがあるものの、依然として初期構築の大変さは変わらない。  
+
+**クラウドサービスプロバイダ （GKE, EKS, AKS, etc....）**  
+
+Google Cloud、AWS、Azure などのマネージド Kubernetes サービスを利用する方法である。  
+ノードの管理をクラウドプロバイダに任せられるのが最大の特徴であり、コントロールプレーンなどの管理を行う必要がない。  
+しかし、ベンダー依存性が高いサービスや、ランニングコストの高さから、個人利用では中々選択肢として選び難いという事情がある。  
+
+**kind**  
+
+kind は Kubernets をローカル環境で手軽にシミュレーションできる便利なツールのひとつである。  
+Docker 上で完結して動作することが可能であり、軽量な環境構築が可能である。  
+
+**Minikube**  
 
 Minikube は Kubernetes をローカル環境で手軽にシミュレーションできる便利なツールのひとつである。  
-Minikube の詳細なインストール方法については[公式サイト](https://minikube.sigs.k8s.io/docs/start/?arch=%2Flinux%2Fx86-64%2Fstable%2Fbinary+download)を参照されたい。  
-以下は今回の学習で使用する環境構築について解説する。  
+Docker に限らず、 VirtualBoxやHyper-Vなどで動作することができ、ドライバの選択肢が広いのが特徴である。
 
-#### Minikube のインストール
+| 環境 | メリット | デメリット | 用途 |
+|---|---|---|---|
+| **ベアメタル** | 高パフォーマンス、自由度が高い | 運用負担が大きい、スケールが難しい | **オンプレ本番環境** |
+| **クラウドプロバイダ** | 運用負担が少ない、自動スケール可能 | コスト高、ベンダーロックイン | **クラウド本番環境** |
+| **kind** | 軽量、CI/CD 向き | 実運用には向かない | **開発・テスト環境** |
+| **minikube** | シンプル、ローカルで動作 | シングルノード、パフォーマンス低い | **学習・開発環境** |
+
+---
+
+今回の学習では Minikube を用いる。  
+インストールの手順について解説する。  
+Minikube の詳細なインストール方法については[公式サイト](https://minikube.sigs.k8s.io/docs/start/?arch=%2Flinux%2Fx86-64%2Fstable%2Fbinary+download)を参照されたい。  
 
 - LinuxOS (x86) 環境では、以下のコマンドを使ってバイナリをダウンロードする  
 
@@ -348,6 +447,43 @@ Minikube の詳細なインストール方法については[公式サイト](ht
 
     ```shell
     minikube
+    ```
+  
+  - `~/.kube/config` ファイルを確認する  
+
+    ```yaml
+    apiVersion: v1
+    clusters:
+    - cluster:
+        certificate-authority: /home/cyokozai/.minikube/ca.crt
+        extensions:
+        - extension:
+            last-update: Wed, 12 Mar 2025 20:55:34 UTC
+            provider: minikube.sigs.k8s.io
+            version: v1.35.0
+          name: cluster_info
+        server: https://192.168.49.2:8443
+      name: minikube
+    contexts:
+    - context:
+        cluster: minikube
+        extensions:
+        - extension:
+            last-update: Wed, 12 Mar 2025 20:55:34 UTC
+            provider: minikube.sigs.k8s.io
+            version: v1.35.0
+          name: context_info
+        namespace: default
+        user: minikube
+      name: minikube
+    current-context: minikube
+    kind: Config
+    preferences: {}
+    users:
+    - name: minikube
+      user:
+        client-certificate: /home/cyokozai/.minikube/profiles/minikube/client.crt
+        client-key: /home/cyokozai/.minikube/profiles/minikube/client.key
     ```
 
 #### Minikube クラスタに `echoserver` をデプロイする
@@ -467,3 +603,21 @@ Minikube の詳細なインストール方法については[公式サイト](ht
     CONTAINER ID   IMAGE     COMMAND   CREATED   STATUS    PORTS     NAMES
     ```
 
+## Chapter 1.3 作ってみよう Kubernetes | 全体像の説明  
+
+ここでは、本ハンズオンの全体像について紹介する。  
+
+- Chapter  1 | 基礎
+- Chapter  2 | 基礎
+- Chapter  3 | 全体像の説明
+- Chapter  4 | アプリケーションを動かす
+- Chapter  5 | `kubectl` を覚える
+- Chapter  6 | 様々なリソースを作って壊す
+- Chapter  7 | 復習
+- Chapter  8 | 復習
+- Chapter  9 | アーキテクチャを理解する
+- Chapter 10 | 開発ワークフロー
+- Chapter 11 | オブザーバビリティと監視
+- Chapter 12 | ゴール
+
+## Chapter 1.4 作ってみよう Kubernetes | アプリケーションを Kubernetes クラスタ上に作る  

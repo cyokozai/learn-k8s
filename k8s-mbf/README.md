@@ -20,6 +20,8 @@
       - [Minikube クラスタに `echoserver` をデプロイする](#minikube-クラスタに-echoserver-をデプロイする)
   - [Chapter 1.3 作ってみよう Kubernetes | 全体像の説明](#chapter-13-作ってみよう-kubernetes--全体像の説明)
   - [Chapter 1.4 作ってみよう Kubernetes | アプリケーションを Kubernetes クラスタ上に作る](#chapter-14-作ってみよう-kubernetes--アプリケーションを-kubernetes-クラスタ上に作る)
+    - [マニフェストについて](#マニフェストについて)
+    - [Kubernetes のリソース](#kubernetes-のリソース)
 
 ## Chapter 1.1 作ってみよう Kubernetes | Doker コンテナを作ってみる
 
@@ -621,3 +623,30 @@ Minikube の詳細なインストール方法については[公式サイト](ht
 - Chapter 12 | ゴール
 
 ## Chapter 1.4 作ってみよう Kubernetes | アプリケーションを Kubernetes クラスタ上に作る  
+
+### マニフェストについて
+
+[マニフェスト (Manifast)](https://kubernetes.io/ja/docs/concepts/cluster-administration/manage-deployment/) とは、Kubernetes のリソース (Pod, Service, Deployment, etc...) を提供するための**設定ファイル**である。  
+マニフェストは YAML 形式で記述される。  
+
+```yaml
+apiVersion: v1
+kind: Pod
+metadata: 
+  name: nginx
+spec:
+  containers:
+    - name: nginx
+      image: nginx:1.25.3
+      ports:
+        - containerPort: 80
+```
+
+### Kubernetes のリソース  
+
+ここからは、Kubernets の基本的なリソースについて解説する。
+
+**Pod**  
+
+Kubernetes で扱われるリソースの最小構成単位である。  
+コンテナを起動するための

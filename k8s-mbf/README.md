@@ -645,12 +645,6 @@ spec:
 Pod は共有の名前空間と共有ファイルシステムのボリュームを持つ。  
 Pod を作成するマニフェストは以下の通り。  
 
-- Kubernetes に Pod をデプロイするには `apply` コマンドを実行する
-
-  ```shell
-  kubectl apply -f ./ch-04/nginx.yaml
-  ```
-
 Pod は単一のコンテナしか持たないシングルトン (singleton) から、複数のコンテナをまとめて起動することも可能 ([Envoy](https://www.envoyproxy.io/) をはじめとするサイドカーなど)。  
 通常は自分で Pod を直接作成する必要はない。  
 Pod は [Deployment](https://kubernetes.io/ja/docs/concepts/workloads/controllers/deployment/) や [Job](https://kubernetes.io/ja/docs/concepts/workloads/controllers/job/) などの[ワークロードリソース](https://kubernetes.io/ja/docs/concepts/workloads/)を使用して作成される。  

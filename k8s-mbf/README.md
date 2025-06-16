@@ -656,6 +656,14 @@ Pod は単一のコンテナしか持たないシングルトン (singleton) か
 Pod は [Deployment](https://kubernetes.io/ja/docs/concepts/workloads/controllers/deployment/) や [Job](https://kubernetes.io/ja/docs/concepts/workloads/controllers/job/) などの[ワークロードリソース](https://kubernetes.io/ja/docs/concepts/workloads/)を使用して作成される。  
 基本的に Pod には状態を持たせない (stateless) ことを推奨しているが、もし Pod が状態を保持する必要がある場合は、[StatefulSet](https://kubernetes.io/ja/docs/concepts/workloads/controllers/statefulset/) リソースを使用することを薦める。
 
+**[Service](https://kubernetes.io/ja/docs/concepts/services-networking/service/)**  
+
+Service とは、 クラスター内で1つ以上の Pod として実行されているネットワークアプリケーションを公開する方法である。  
+Kubernetes は Pod にそれぞれの IP アドレス割り振りや、Pod のセットに対する単一の DNS 名を提供したり、それらの Pod のセットに対する負荷分散が可能である。  
+Service は IP アドレスとポート番号 を Pod と紐付け、Kubernetes におけるアプリケーションの名前付きエントリポイントを常に提供する。  
+さらに、Service の用途はエントリポイントに限らず、ロードバランシングやサービスディスカバリに使用される。  
+また、各 Servie は1つの Namespace に属し、 `<service-name>.<namespace-name>.svc.cluster.local` ような DNS レコードが割り当てられる。  
+
 **[Namespace](https://kubernetes.io/ja/docs/concepts/overview/working-with-objects/namespaces/)**  
 
 Kubernetes の単一クラスタ内部のリソース群を仮想的なプールに分離する仕組みを提供する。  
@@ -682,17 +690,37 @@ Namespace は[リソースクォータ](https://kubernetes.io/ja/docs/concepts/p
     kube-system       Active   38m
     ```
 
-**Service**  
+**[Label](https://kubernetes.io/ja/docs/concepts/overview/working-with-objects/labels/)**  
 
-Service とは、 クラスター内で1つ以上の Pod として実行されているネットワークアプリケーションを公開する方法である。  
-Kubernetes は Pod にそれぞれの IP アドレス割り振りや、Pod のセットに対する単一の DNS 名を提供したり、それらの Pod のセットに対する負荷分散が可能である。  
-Service は IP アドレスとポート番号 を Pod と紐付け、Kubernetes におけるアプリケーションの名前付きエントリポイントを常に提供する。  
-さらに、Service の用途はエントリポイントに限らず、ロードバランシングやサービスディスカバリに使用される。  
-また、各 Servie は1つの Namespace に属し、 `<service-name>.<namespace-name>.svc.cluster.local` ような DNS レコードが割り当てられる。  
+Kubernetes が提供するアプリケーションのコンセプトを定義する基本的要素として、Namespace の他に ラベル　(Labels) がある。  
+ラベルは Pod などのオブジェクトに割り当てられたキーとバリューのペアで、ユーザーに関連した意味のあるオブジェクトの属性を指定するために使われることを目的としている。  
+マイクロサービスアーキテクチャの考え方が現れる以前は、アプリケーションとは1つのデプロイ単位について、1つのバージョンスキームとリリースサイクルが対応していた。  
+しかし、マイクロサービスの登場以降、アプリケーションは複数の小さなコンポーネントとして分割され、それぞれが小さなサービスとして独立し、開発、リリース、再起動、スケールされるものになった。  
+アプリケーション開発のパラダイムの変化は、独立したそれぞれのサービスがあるアプリケーションに所属していることを示す何らかの方法を必要とした。  
+それが Kubernetes における Label である。  
 
-**Label**  
+![image3](./images/labels.png)
 
+ラベルはオブジェクトのサブセットを選択し、グルーピングするために使うことができる。  
+また、ラベルはオブジェクトの作成時に割り当てられ、その後いつでも追加、修正が可能である。  
 
+```yaml
+"metadata": {
+  "labels": {
+    "key1" : "value1",
+    "key2" : "value2"
+  }
+}
+```
+
+Label の使用用途について以下にまとめ、引用文を紹介する。  
+
+- ReplicaSet は、特定の Pod のインスタンスが動き続けるようにするため Label を使用する
+- スケジューラは Pod の要求を満たすノードに Pod を一緒に配置したり分散したりするのに Label を使用する
+- Label は Pod の集合を論理的にグループ化し、Pod が属するアプリケーションを識別できるようにする
+
+> 上記の一般的なユースケースに加え、メタデータを保存するのに Label を使用することもできます。Label が何に使われるのか予想するのは難しいかもしれませんが、Pod に関する重要な情報を記述できるだけの Label をつけておくべきです。例えば、アプリケーションの論理的グループ、ビジネス上の特性や重要度、ハードウェアアーキテクチャなどの実行時のプラットフォーム依存関係、場所に関する優先事項などの情報を Label として持っておくのは、どれも役に立ちます。
+> 引用: [Kubernetesパターン 第2版―クラウドネイティブアプリケーションのための再利用可能パターン](https://www.oreilly.co.jp/books/9784814400881/), オライリー・ジャパン, P.9
 
 **その他 (開発者向け)**  
 
@@ -700,7 +728,7 @@ Service は IP アドレスとポート番号 を Pod と紐付け、Kubernetes 
 しかし、開発者の多くはこれ以外にもたくさんの抽象化された基本的要素を使いこなして日々の業務を行っている。  
 そして、これら Kubernetes を構成するリソースのコンセプトは、問題解決を繰り返すことでやがてパターンとして考え方が定着する。  
 
-![image3](./images/k8sconsept.png)
+![image4](./images/k8sconsept.png)
 
 ### Pod を動作させる
 

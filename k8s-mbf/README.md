@@ -15,6 +15,7 @@
     - [マニフェストについて](#マニフェストについて)
     - [Kubernetes のリソース](#kubernetes-のリソース)
     - [Pod を動作させる](#pod-を動作させる)
+  - [def](#def)
 
 ## Chapter 1.1 作ってみよう Kubernetes | Doker コンテナを作ってみる
 
@@ -735,8 +736,14 @@ Label の使用用途について以下にまとめ、引用文を紹介する�
   - 結果
 
     ```shell
-    NAME    STATUS   ROLES           AGE   VERSION
-    node1   Ready    control-plane   55m   v1.31.7
-    node2   Ready    control-plane   55m   v1.31.7
-    node3   Ready    control-plane   55m   v1.31.7
+    NAME       STATUS   ROLES           AGE   VERSION
+    minikube   Ready    control-plane   46m   v1.32.0
     ```
+
+- `myapp.yaml` マニフェストを適用する
+
+  ```shell
+  kubectl apply -f ./k8s-mbf/ch-04/myapp.yaml
+  ```
+
+## def

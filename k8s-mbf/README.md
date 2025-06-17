@@ -15,7 +15,7 @@
     - [マニフェストについて](#マニフェストについて)
     - [Kubernetes のリソース](#kubernetes-のリソース)
     - [Pod を動作させる](#pod-を動作させる)
-  - [def](#def)
+  - [トラブルシューティングガイドと `kubectl` コマンドの使い方](#トラブルシューティングガイドと-kubectl-コマンドの使い方)
 
 ## Chapter 1.1 作ってみよう Kubernetes | Doker コンテナを作ってみる
 
@@ -746,4 +746,44 @@ Label の使用用途について以下にまとめ、引用文を紹介する�
   kubectl apply -f ./k8s-mbf/ch-04/myapp.yaml
   ```
 
-## def
+- Pod を確認する
+
+  ```shell
+  kubectl get pods -n default
+  ```
+
+  - 結果
+
+    ```shell
+    NAME    READY   STATUS    RESTARTS   AGE
+    myapp   1/1     Running   0          33s
+    ```
+
+---
+
+- `kubectl run` コマンドでも同様に Pod を作成できる
+
+  ```shell
+  kubectl run myapp2 --image=blux2/hello-server:1.0 -n default
+  ```
+
+- Pod を確認する
+
+  ```shell
+  kubectl get pods -n default
+  ```
+
+  - 結果
+
+    ```shell
+    NAME     READY   STATUS    RESTARTS   AGE
+    myapp    1/1     Running   0          21h
+    myapp2   1/1     Running   0          7s
+    ```
+
+しかし、`kubectl run` を使用する際は、マニフェストによる差分の変更の参照ができないことに注意すべきである。  
+マニフェストが存在しない場合、Pod の冗長化をはじめとする高度な設定は使えない。  
+`kubectl run` はデバックなどの一時的な Pod を使用する際に用いられる場合が多い。  
+
+## トラブルシューティングガイドと `kubectl` コマンドの使い方
+

@@ -16,6 +16,8 @@
     - [Kubernetes のリソース](#kubernetes-のリソース)
     - [Pod を動作させる](#pod-を動作させる)
   - [トラブルシューティングガイドと `kubectl` コマンドの使い方](#トラブルシューティングガイドと-kubectl-コマンドの使い方)
+    - [Trouble shooting](#trouble-shooting)
+    - [STATUS カラム](#status-カラム)
 
 ## Chapter 1.1 作ってみよう Kubernetes | Doker コンテナを作ってみる
 
@@ -786,4 +788,26 @@ Label の使用用途について以下にまとめ、引用文を紹介する�
 `kubectl run` はデバックなどの一時的な Pod を使用する際に用いられる場合が多い。  
 
 ## トラブルシューティングガイドと `kubectl` コマンドの使い方
+
+### Trouble shooting
+
+![image5](./images/troubleshooting.png)
+
+[**`kubectl logs` の詳細**](https://kubernetes.io/ja/docs/reference/kubectl/cheatsheet/#%E5%AE%9F%E8%A1%8C%E4%B8%AD%E3%81%AE%E3%83%9D%E3%83%83%E3%83%89%E3%81%A8%E3%81%AE%E5%AF%BE%E8%A9%B1%E5%87%A6%E7%90%86)
+
+### STATUS カラム
+
+STATUSカラムにはトラブルシューティング時に役立つ情報が出力される。  
+以下に代表的なSTATUSを紹介する。
+
+| カラム | 詳細 |
+| - | - |
+| Pending      | Kubernetes クラスタから Pod の作成許可が下りた状況で、1つ以上のコンテナが準備中であることを意味する。Pod 起動直後にこの STATUS が表示されることがあるが、長時間この STATUS である場合は異常を疑うべきである。Pod の Events を参照し、ヒントが書かれていないか確認する。 |
+| Running      | Pod がノードにスケジュールされ、すべてのコンテナが作成された状態。少なくとも1つのコンテナがまだ実行中、起動または再起動のプロセス中である。常時起動が想定される Pod であれば正常な STATUS である。|
+| Completed    | Pod 内のすべてのコンテナが完了した状態。再起動は行われない。|
+| Unknown      | 何らかの理由で Pod の状態を取得できなかったことを表す。この STATUS は通常、Pod が実行されるべきノードとの通信エラーが原因で発生する。|
+| ErrImagePull | Image の取得に失敗したことを表す。Pod の Events を参照し、ヒントが書かれていないか確認する。|
+| Error        | コンテナが異常終了したことを表す。Pod のログを参照し、ヒントが書かれていないか確認する。|
+| OOMKilled    | コンテナが Out Of Memory (OOM) で終了したことを表す。Pod の使用リソースを増やす。|
+| Terminating  | Pod が削除中の状態を表す。Terminating を繰り返す場合は異常を疑う。Pod の Events を参照し、ヒントが書かれていないか確認する。|
 

@@ -830,13 +830,13 @@ Kubernetes のあらゆるリソース情報を取得できるコマンド。
   kubectl get pod --namespace default
   ```
 
-  - 結果
+  結果
 
-    ```shell
-    NAME     READY   STATUS    RESTARTS   AGE
-    myapp    1/1     Running   0          13h
-    myapp2   1/1     Running   0          16h
-    ```
+  ```shell
+  NAME     READY   STATUS    RESTARTS   AGE
+  myapp    1/1     Running   0          13h
+  myapp2   1/1     Running   0          16h
+  ```
 
   リソース名を指定することで、特例のリソース情報のみを取得、表示することも可能である。  
 
@@ -844,9 +844,48 @@ Kubernetes のあらゆるリソース情報を取得できるコマンド。
   kubectl get pod myapp --namespace default
   ```
 
-  - 結果
+  結果
+
+  ```shell
+  NAME     READY   STATUS    RESTARTS   AGE
+  myapp    1/1     Running   0          13h
+  ```
+
+- `-o`, `--output`
+
+  `--output` オプションは、取得したリソース情報を様々な方法で出力させることができる。  
+
+  - `--output wide`
+  
+    IP アドレスや Node に関する情報を取得する。  
+  
+    ```shell
+    kubectl get pod --namespace default --output wide
+    ```
+
+    結果  
 
     ```shell
-    NAME     READY   STATUS    RESTARTS   AGE
-    myapp    1/1     Running   0          13h
+    NAME     READY   STATUS    RESTARTS   AGE   IP                NODE    NOMINATED NODE   READINESS GATES
+    myapp    1/1     Running   0          13h   xxx.xxx.xxx.xxx   node2   <none>           <none>
+    myapp2   1/1     Running   0          16h   xxx.xxx.xxx.yyy   node2   <none>           <none>
     ```
+
+  - `--output yaml`
+  
+    YAML ファイル形式でリソース情報を取得する。  
+
+    ```shell
+    kubectl get pod myapp --namespace default --output yaml
+    ```
+
+    結果
+
+    ```yaml
+    apiVersion: v1
+    kind: Pod
+    metadata:
+      annotations:
+    ~~~省略~~~
+    ```
+

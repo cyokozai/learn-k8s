@@ -18,6 +18,7 @@
   - [トラブルシューティングガイドと `kubectl` コマンドの使い方](#トラブルシューティングガイドと-kubectl-コマンドの使い方)
     - [Trouble shooting](#trouble-shooting)
     - [STATUS カラム](#status-カラム)
+    - [`kubectl get`: Kubernetes リソースの取得](#kubectl-get-kubernetes-リソースの取得)
 
 ## Chapter 1.1 作ってみよう Kubernetes | Doker コンテナを作ってみる
 
@@ -791,9 +792,9 @@ Label の使用用途について以下にまとめ、引用文を紹介する�
 
 ### Trouble shooting
 
-![image5](./images/troubleshooting.png)
-
 [**`kubectl logs` の詳細**](https://kubernetes.io/ja/docs/reference/kubectl/cheatsheet/#%E5%AE%9F%E8%A1%8C%E4%B8%AD%E3%81%AE%E3%83%9D%E3%83%83%E3%83%89%E3%81%A8%E3%81%AE%E5%AF%BE%E8%A9%B1%E5%87%A6%E7%90%86)
+
+![image5](./images/troubleshooting.png)
 
 ### STATUS カラム
 
@@ -811,3 +812,41 @@ STATUSカラムにはトラブルシューティング時に役立つ情報が�
 | OOMKilled    | コンテナが Out Of Memory (OOM) で終了したことを表す。Pod の使用リソースを増やす。|
 | Terminating  | Pod が削除中の状態を表す。Terminating を繰り返す場合は異常を疑う。Pod の Events を参照し、ヒントが書かれていないか確認する。|
 
+### `kubectl get`: Kubernetes リソースの取得
+
+```shell
+kubectl get <リソース> <オプション>
+```
+
+Kubernetes のあらゆるリソース情報を取得できるコマンド。  
+以下では頻繁に使用するオプションについて Pod リソースを例に紹介する。  
+
+- `-n`, `--namespace`
+
+  Namespace は単一のクラスタ内部にあるリソース群を論理的に分離するために使用するリソースである。  
+  Kubernetes クラスタ作成時に `default` Namespace が自動で作成され、`--namespace` オプションを省略する場合は `default` Namespace が自動で選択される。  
+
+  ```shell
+  kubectl get pod --namespace default
+  ```
+
+  - 結果
+
+    ```shell
+    NAME     READY   STATUS    RESTARTS   AGE
+    myapp    1/1     Running   0          13h
+    myapp2   1/1     Running   0          16h
+    ```
+
+  リソース名を指定することで、特例のリソース情報のみを取得、表示することも可能である。  
+
+  ```shell
+  kubectl get pod myapp --namespace default
+  ```
+
+  - 結果
+
+    ```shell
+    NAME     READY   STATUS    RESTARTS   AGE
+    myapp    1/1     Running   0          13h
+    ```

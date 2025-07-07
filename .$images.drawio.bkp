@@ -723,9 +723,6 @@
         <mxCell id="-UKgmH6z7iOr0A6Txxeb-14" value="エラーがない" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Zen Kaku Gothic New;fontSize=12;fillColor=none;strokeColor=none;align=left;" vertex="1" parent="1">
           <mxGeometry x="800" y="640" width="80" height="40" as="geometry" />
         </mxCell>
-        <mxCell id="-UKgmH6z7iOr0A6Txxeb-15" value="&lt;font style=&quot;font-size: 14px;&quot;&gt;Correct&lt;/font&gt;" style="rounded=0;whiteSpace=wrap;html=1;fontFamily=Zen Kaku Gothic New;fontSize=12;fillColor=none;strokeColor=none;align=left;" vertex="1" parent="1">
-          <mxGeometry x="1000" y="560" width="80" height="40" as="geometry" />
-        </mxCell>
       </root>
     </mxGraphModel>
   </diagram>

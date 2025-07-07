@@ -7,21 +7,18 @@
   - [Chapter 1.1 作ってみよう Kubernetes | Doker コンテナを作ってみる](#chapter-11-作ってみよう-kubernetes--doker-コンテナを作ってみる)
     - [コンテナ](#コンテナ)
     - [なぜコンテナを使うのか？](#なぜコンテナを使うのか)
-      - [仮想マシン (VM) よりも高速にアプリケーションを起動できるようになった](#仮想マシン-vm-よりも高速にアプリケーションを起動できるようになった)
-      - [マイクロサービスアーキテクチャとコンテナの相性が良い](#マイクロサービスアーキテクチャとコンテナの相性が良い)
     - [Docker](#docker)
-      - [Docker のインストール (Ubuntu)](#docker-のインストール-ubuntu)
-      - [Docker の基本コマンド](#docker-の基本コマンド)
-      - [Docker image と Dockerfile](#docker-image-と-dockerfile)
   - [Chapter 1.2 作ってみよう Kubernetes | Kubernetes クラスタを作ってみる](#chapter-12-作ってみよう-kubernetes--kubernetes-クラスタを作ってみる)
     - [Kubernetes](#kubernetes)
-      - [Kubernetes アーキテクチャ](#kubernetes-アーキテクチャ)
-      - [Kubernetes のインストール](#kubernetes-のインストール)
-      - [Minikube クラスタに `echoserver` をデプロイする](#minikube-クラスタに-echoserver-をデプロイする)
   - [Chapter 1.3 作ってみよう Kubernetes | 全体像の説明](#chapter-13-作ってみよう-kubernetes--全体像の説明)
   - [Chapter 1.4 作ってみよう Kubernetes | アプリケーションを Kubernetes クラスタ上に作る](#chapter-14-作ってみよう-kubernetes--アプリケーションを-kubernetes-クラスタ上に作る)
     - [マニフェストについて](#マニフェストについて)
     - [Kubernetes のリソース](#kubernetes-のリソース)
+    - [Pod を動作させる](#pod-を動作させる)
+  - [トラブルシューティングガイドと `kubectl` コマンドの使い方](#トラブルシューティングガイドと-kubectl-コマンドの使い方)
+    - [Trouble shooting](#trouble-shooting)
+    - [STATUS カラム](#status-カラム)
+    - [`kubectl get`: Kubernetes リソースの取得](#kubectl-get-kubernetes-リソースの取得)
 
 ## Chapter 1.1 作ってみよう Kubernetes | Doker コンテナを作ってみる
 
@@ -40,23 +37,23 @@ Docker の登場以来、コンテナ仮想化技術を採用した開発・運�
 ではなぜコンテナを選ぶケースが増えているのか。  
 ここでは主に2つの理由について解説する。  
 
-#### 仮想マシン (VM) よりも高速にアプリケーションを起動できるようになった
+**仮想マシン (VM) よりも高速にアプリケーションを起動できるようになった**
 
 コンテナとよく比較される VM は、ハードウェアや OS を含めて仮想化する技術である。  
 コンテナはそれ自体は OS を含まず、ホストの Kernel を共有する。  
 それゆえ、リソースの消費が少なく起動時間も早いことからコンテナの採用率が増加していると考えられる[^1]。  
 
+[^1]: <https://kubernetes.io/ja/docs/concepts/overview/>
+
 ![image1](./images/vmcontainer.png)
 
-[^1]: <https://kubernetes.io/ja/docs/concepts/overview/#%E9%81%8E%E5%8E%BB%E3%82%92%E6%8C%AF%E3%82%8A%E8%BF%94%E3%81%A3%E3%81%A6%E3%81%BF%E3%82%8B%E3%81%A8>
-
-#### マイクロサービスアーキテクチャとコンテナの相性が良い
+**マイクロサービスアーキテクチャとコンテナの相性が良い**
 
 [マイクロサービスアーキテクチャ (Microservice Architecture)](https://knowledge.sakura.ad.jp/20167/) とは、一般に次のようなものを指す。  
 
 1. 個々のマイクロサービスはそれぞれ独立したプロセスとして動作する
-1. 各マイクロサービスは主にネットワーク経由で通信して所定のタスクを処理する
-1. 各マイクロサービスはほかのマイクロサービスに依存せず起動でき、独立してデプロイやアップデートが可能
+2. 各マイクロサービスは主にネットワーク経由で通信して所定のタスクを処理する
+3. 各マイクロサービスはほかのマイクロサービスに依存せず起動でき、独立してデプロイやアップデートが可能
 
 マイクロサービスの採用により、顧客に対して柔軟かつ高速にサービスの価値を提供できるようになる。  
 したがって、マイクロサービスの性能を十分に発揮できるようなインフラとして、コンテナが採用される背景がある。  
@@ -65,15 +62,15 @@ Docker の登場以来、コンテナ仮想化技術を採用した開発・運�
 
 ### Docker
 
-Docker はコンテナ仮想化技術の一つであり、**コンテナを作成・実行・管理するためのツール**である。  
+Docker はコンテナ仮想化技術の1つであり、**コンテナを作成・実行・管理するためのツール**である。  
 Dockerfile, Docker image, Docker Hub とこれら一連の操作を提供する Docker CLI により、ユーザにとって一連のライフサイクルを扱いやすくしてくれている。  
 Docker を使うことで、どの OS や環境でコンテナを実行しても必ず同じ動作をすることが保証される。
 
-#### Docker のインストール (Ubuntu)
+**Docker のインストール (Ubuntu)**
 
 [Docker CE の入手](https://docs.docker.jp/engine/installation/linux/docker-ce/ubuntu.html)を参照。
 
-#### Docker の基本コマンド
+**Docker の基本コマンド**
 
 <details><summary>基本コマンド一覧を開く</summary><div>
 
@@ -117,14 +114,14 @@ Docker を使うことで、どの OS や環境でコンテナを実行しても
 
 </div></details>
 
-#### Docker image と Dockerfile
+**Docker image と Dockerfile**
 
-**Docker image**  
+***Docker image***  
 
 Docker でコンテナを作成するには、コンテナの元となるイメージ (image) を取得する必要がある。  
 例えば、`nginx` のコンテナをデプロイする場面を考える。  
 `nginx` のイメージは Nginx 公式が Docker Hub にイメージを公開しているものを使用することができる。  
-このイメージの中には Nginx が動作するために必要な全てのファイルが含まれている。  
+このイメージの中には Nginx が動作するために必要なすべてのファイルが含まれている。  
 
 - 公式の Docker Hub に掲載している方法でイメージのダウンロードからコンテナのデプロイまでを行うことができる  
 
@@ -164,7 +161,7 @@ Docker でコンテナを作成するには、コンテナの元となるイメ�
   docker rmi nginx:latest
   ```
 
-**Docker Hub**  
+***Docker Hub***  
 
 [Docker Hub](https://hub.docker.com/) は Docker の公式リポジトリで、様々なイメージを提供している。  
 Docker Hub にあるイメージを取得するには、以下のように `docker pull` を実行する。  
@@ -183,7 +180,7 @@ Docker Hub にあるイメージを取得するには、以下のように `dock
 
   - `docker run` 実行時、ローカルにイメージが存在しない場合は自動で Docker Hub からイメージをダウンロードする  
 
-**Dockerfile**  
+***Dockerfile***  
 
 Dockerfile はオリジナルの Docker イメージを作成するためのレシピである。  
 例えば、自分で作成したアプリをコンテナでデプロイすることを考える。  
@@ -324,15 +321,15 @@ Kubernetes にはコンテナオーケストレーションを実現するため
 
 [^2]: <https://kubernetes.io/ja/docs/concepts/overview/#why-you-need-kubernetes-and-what-can-it-do>
 
-#### Kubernetes アーキテクチャ
+**Kubernetes アーキテクチャ**  
 
 Kubernetes のアーキテクチャについて簡単に説明する[^3]。  
-Kubernetesクラスターは、 コンテナ化されたアプリケーションを実行する、ノードと呼ばれるワーカーマシンの集合である。  
-すべてのクラスターには少なくとも1つのワーカーノードが存在する。  
+Kubernetesクラスタは、 コンテナ化されたアプリケーションを実行する、ノードと呼ばれるワーカーマシンの集合である。  
+すべてのクラスタには少なくとも1つのワーカーノードが存在する。  
 
 ![components](./images/k8scomponents.png)
 
-**ワーカーノード**  
+***ワーカーノード***  
 
 ワーカーノードはPodをホストする役割を担う。  
 Podとは、Kubernetes内で作成・管理できるコンピューティングの最小のデプロイ可能なユニットであり、アプリケーションのコンポーネントの要素でもある。  
@@ -342,37 +339,37 @@ Podとは、Kubernetes内で作成・管理できるコンピューティング�
 - k-proxy  
 - container runtime  
 
-**コントロールプレーン**  
+***コントロールプレーン***  
 
-コントロールプレーンコンポーネントは、クラスターに関する全体的な決定(スケジューリングなど)を行う。  
-また、クラスターイベントの検出および応答を処理する (たとえば、deploymentのreplicasフィールドが満たされていない場合に、新しい Pod を起動する等)。  
+コントロールプレーンコンポーネントは、クラスタに関する全体的な決定(スケジューリングなど)を行う。  
+また、クラスタイベントの検出および応答を処理する (たとえば、deploymentのreplicasフィールドが満たされていない場合に、新しい Pod を起動する等)。  
 
 [^3]: <https://kubernetes.io/ja/docs/concepts/overview/components/>
 
-#### Kubernetes のインストール
+**Kubernetes のインストール**  
 
 ここからは Kubernetes を実際に触っていく。  
 その前に、代表的な Kubernetes 環境についてそれぞれ比較する。  
 
-**ベアメタル**  
+***ベアメタル***  
 
 物理サーバー上に Kubernetes クラスタを直接構築する方法。  
 OS やネットワーク、ストレージの管理を自分で行う必要がある。  
 高パフォーマンスかつクラウドプロバイダなどのベンダーロックインなしで Kubernetes クラスタを運用可能である。  
 しかし、その分運用コストが高く、また Kubespray などをはじめとする Kubernetes プロビジョニングツールがあるものの、依然として初期構築の大変さは変わらない。  
 
-**クラウドサービスプロバイダ （GKE, EKS, AKS, etc....）**  
+***クラウドサービスプロバイダ （GKE, EKS, AKS, etc....）***  
 
 Google Cloud、AWS、Azure などのマネージド Kubernetes サービスを利用する方法である。  
 ノードの管理をクラウドプロバイダに任せられるのが最大の特徴であり、コントロールプレーンなどの管理を行う必要がない。  
 しかし、ベンダー依存性が高いサービスや、ランニングコストの高さから、個人利用では中々選択肢として選び難いという事情がある。  
 
-**kind**  
+***kind***  
 
-kind は Kubernets をローカル環境で手軽にシミュレーションできる便利なツールのひとつである。  
+kind は Kubernetes をローカル環境で手軽にシミュレーションできる便利なツールのひとつである。  
 Docker 上で完結して動作することが可能であり、軽量な環境構築が可能である。  
 
-**Minikube**  
+***Minikube***  
 
 Minikube は Kubernetes をローカル環境で手軽にシミュレーションできる便利なツールのひとつである。  
 Docker に限らず、 VirtualBoxやHyper-Vなどで動作することができ、ドライバの選択肢が広いのが特徴である。
@@ -488,7 +485,7 @@ Minikube の詳細なインストール方法については[公式サイト](ht
         client-key: /home/cyokozai/.minikube/profiles/minikube/client.key
     ```
 
-#### Minikube クラスタに `echoserver` をデプロイする
+**Minikube クラスタに `echoserver` をデプロイする**  
 
 - Minikube クラスタにサンプル用のアプリ `echoserver` をデプロイする  
   Deployment は `hello-minikube` で作成します  
@@ -644,9 +641,251 @@ spec:
 
 ### Kubernetes のリソース  
 
-ここからは、Kubernets の基本的なリソースについて解説する。
+ここからは、Kubernetes の基本的なリソースについて解説する。
 
-**Pod**  
+**[Pod](https://kubernetes.io/ja/docs/concepts/workloads/pods/)**  
 
-Kubernetes で扱われるリソースの最小構成単位である。  
-コンテナを起動するための
+コンテナを起動するための Kubernetes で扱われるリソースの最小構成単位である。  
+Pod は共有の名前空間と共有ファイルシステムのボリュームを持つ。  
+Pod を作成するマニフェストは以下の通り。  
+
+Pod は単一のコンテナしか持たないシングルトン (singleton) から、複数のコンテナをまとめて起動することも可能 ([Envoy](https://www.envoyproxy.io/) をはじめとするサイドカーなど)。  
+通常は自分で Pod を直接作成する必要はない。  
+Pod は [Deployment](https://kubernetes.io/ja/docs/concepts/workloads/controllers/deployment/) や [Job](https://kubernetes.io/ja/docs/concepts/workloads/controllers/job/) などの[ワークロードリソース](https://kubernetes.io/ja/docs/concepts/workloads/)を使用して作成される。  
+基本的に Pod には状態を持たせない (stateless) ことを推奨しているが、もし Pod が状態を保持する必要がある場合は、[StatefulSet](https://kubernetes.io/ja/docs/concepts/workloads/controllers/statefulset/) リソースを使用することを薦める。
+
+**[Service](https://kubernetes.io/ja/docs/concepts/services-networking/service/)**  
+
+Service とは、 クラスター内で1つ以上の Pod として実行されているネットワークアプリケーションを公開する方法である。  
+Kubernetes は Pod にそれぞれの IP アドレス割り振りや、Pod のセットに対する単一の DNS 名を提供したり、それらの Pod のセットに対する負荷分散が可能である。  
+Service は IP アドレスとポート番号 を Pod と紐付け、Kubernetes におけるアプリケーションの名前付きエントリポイントを常に提供する。  
+さらに、Service の用途はエントリポイントに限らず、ロードバランシングやサービスディスカバリに使用される。  
+また、各 Servie は1つの Namespace に属し、 `<service-name>.<namespace-name>.svc.cluster.local` ような DNS レコードが割り当てられる。  
+
+**[Namespace](https://kubernetes.io/ja/docs/concepts/overview/working-with-objects/namespaces/)**  
+
+Kubernetes の単一クラスタ内部のリソース群を仮想的なプールに分離する仕組みを提供する。  
+Namespace の一般的なユースケースとして、開発・テスト・本番といった複数の環境を単一クラスタで表現する例が挙げられる。  
+Namespace は[リソースクォータ](https://kubernetes.io/ja/docs/concepts/policy/resource-quotas/)を介して複数のユーザーの間でクラスタリソースを分割する。  
+単一の Namespace 内部のリソース (Pod, Service, ReplicaSet) 名は一意である必要があるが、Namespace 全体ではユニークである必要はない。  
+各 Namespace は相互にネストすることはできず、各 Kubernetes リソースは1つの Namespace にのみ存在できる。  
+ただし、すべての Kubernetes リソースが Namespace を利用できるとは限らない (Node, PersistentVolume などのクラスタワイドに作成されるリソース) 。  
+また、同一の Namespace 内でリソースを区別するためには[ラベル](https://kubernetes.io/ja/docs/concepts/overview/working-with-objects/labels/)を使用する。  
+
+- Namespace の情報を取得するには、次のコマンドを実行する
+
+  ```shell
+  kubectl get ns
+  ```
+
+  - 結果
+
+    ```shell
+    NAME              STATUS   AGE
+    default           Active   38m
+    kube-node-lease   Active   38m
+    kube-public       Active   38m
+    kube-system       Active   38m
+    ```
+
+**[Label](https://kubernetes.io/ja/docs/concepts/overview/working-with-objects/labels/)**  
+
+Kubernetes が提供するアプリケーションのコンセプトを定義する基本的要素として、Namespace の他に ラベル　(Labels) がある。  
+ラベルは Pod などのオブジェクトに割り当てられたキーとバリューのペアで、ユーザーに関連した意味のあるオブジェクトの属性を指定するために使われることを目的としている。  
+マイクロサービスアーキテクチャの考え方が現れる以前は、アプリケーションとは1つのデプロイ単位について、1つのバージョンスキームとリリースサイクルが対応していた。  
+しかし、マイクロサービスの登場以降、アプリケーションは複数の小さなコンポーネントとして分割され、それぞれが小さなサービスとして独立し、開発、リリース、再起動、スケールされるものになった。  
+アプリケーション開発のパラダイムの変化は、独立したそれぞれのサービスがあるアプリケーションに所属していることを示す何らかの方法を必要とした。  
+それが Kubernetes における Label である。  
+
+![image3](./images/labels.png)
+
+ラベルはオブジェクトのサブセットを選択し、グルーピングするために使うことができる。  
+また、ラベルはオブジェクトの作成時に割り当てられ、その後いつでも追加、修正が可能である。  
+
+```yaml
+"metadata": {
+  "labels": {
+    "key1" : "value1",
+    "key2" : "value2"
+  }
+}
+```
+
+Label の使用用途について以下にまとめ、引用文を紹介する。  
+
+- ReplicaSet は、特定の Pod のインスタンスが動き続けるようにするため Label を使用する
+- スケジューラは Pod の要求を満たすノードに Pod を一緒に配置したり分散したりするのに Label を使用する
+- Label は Pod の集合を論理的にグループ化し、Pod が属するアプリケーションを識別できるようにする
+
+> 上記の一般的なユースケースに加え、メタデータを保存するのに Label を使用することもできます。Label が何に使われるのか予想するのは難しいかもしれませんが、Pod に関する重要な情報を記述できるだけの Label をつけておくべきです。例えば、アプリケーションの論理的グループ、ビジネス上の特性や重要度、ハードウェアアーキテクチャなどの実行時のプラットフォーム依存関係、場所に関する優先事項などの情報を Label として持っておくのは、どれも役に立ちます。
+> 引用: [Kubernetesパターン 第2版―クラウドネイティブアプリケーションのための再利用可能パターン](https://www.oreilly.co.jp/books/9784814400881/), オライリー・ジャパン, P.9
+
+**その他 (開発者向け)**  
+
+ここまでは Kubernetes の構成要素を簡単に紹介した。  
+しかし、開発者の多くはこれ以外にもたくさんの抽象化された基本的要素を使いこなして日々の業務を行っている。  
+そして、これら Kubernetes を構成するリソースのコンセプトは、問題解決を繰り返すことでやがてパターンとして考え方が定着する。  
+
+![image4](./images/k8sconsept.png)
+
+### Pod を動作させる
+
+- Node の状態を確認する
+
+  ```shell
+  kubectl get nodes
+  ```
+
+  - 結果
+
+    ```shell
+    NAME       STATUS   ROLES           AGE   VERSION
+    minikube   Ready    control-plane   46m   v1.32.0
+    ```
+
+- `myapp.yaml` マニフェストを適用する
+
+  ```shell
+  kubectl apply -f ./k8s-mbf/ch-04/myapp.yaml
+  ```
+
+- Pod を確認する
+
+  ```shell
+  kubectl get pods -n default
+  ```
+
+  - 結果
+
+    ```shell
+    NAME    READY   STATUS    RESTARTS   AGE
+    myapp   1/1     Running   0          33s
+    ```
+
+---
+
+- `kubectl run` コマンドでも同様に Pod を作成できる
+
+  ```shell
+  kubectl run myapp2 --image=blux2/hello-server:1.0 -n default
+  ```
+
+- Pod を確認する
+
+  ```shell
+  kubectl get pods -n default
+  ```
+
+  - 結果
+
+    ```shell
+    NAME     READY   STATUS    RESTARTS   AGE
+    myapp    1/1     Running   0          21h
+    myapp2   1/1     Running   0          7s
+    ```
+
+しかし、`kubectl run` を使用する際は、マニフェストによる差分の変更の参照ができないことに注意すべきである。  
+マニフェストが存在しない場合、Pod の冗長化をはじめとする高度な設定は使えない。  
+`kubectl run` はデバックなどの一時的な Pod を使用する際に用いられる場合が多い。  
+
+## トラブルシューティングガイドと `kubectl` コマンドの使い方
+
+### Trouble shooting
+
+[**`kubectl logs` の詳細**](https://kubernetes.io/ja/docs/reference/kubectl/cheatsheet/#%E5%AE%9F%E8%A1%8C%E4%B8%AD%E3%81%AE%E3%83%9D%E3%83%83%E3%83%89%E3%81%A8%E3%81%AE%E5%AF%BE%E8%A9%B1%E5%87%A6%E7%90%86)
+
+![image5](./images/troubleshooting.png)
+
+### STATUS カラム
+
+STATUSカラムにはトラブルシューティング時に役立つ情報が出力される。  
+以下に代表的なSTATUSを紹介する。
+
+| カラム | 詳細 |
+| - | - |
+| Pending      | Kubernetes クラスタから Pod の作成許可が下りた状況で、1つ以上のコンテナが準備中であることを意味する。Pod 起動直後にこの STATUS が表示されることがあるが、長時間この STATUS である場合は異常を疑うべきである。Pod の Events を参照し、ヒントが書かれていないか確認する。 |
+| Running      | Pod がノードにスケジュールされ、すべてのコンテナが作成された状態。少なくとも1つのコンテナがまだ実行中、起動または再起動のプロセス中である。常時起動が想定される Pod であれば正常な STATUS である。|
+| Completed    | Pod 内のすべてのコンテナが完了した状態。再起動は行われない。|
+| Unknown      | 何らかの理由で Pod の状態を取得できなかったことを表す。この STATUS は通常、Pod が実行されるべきノードとの通信エラーが原因で発生する。|
+| ErrImagePull | Image の取得に失敗したことを表す。Pod の Events を参照し、ヒントが書かれていないか確認する。|
+| Error        | コンテナが異常終了したことを表す。Pod のログを参照し、ヒントが書かれていないか確認する。|
+| OOMKilled    | コンテナが Out Of Memory (OOM) で終了したことを表す。Pod の使用リソースを増やす。|
+| Terminating  | Pod が削除中の状態を表す。Terminating を繰り返す場合は異常を疑う。Pod の Events を参照し、ヒントが書かれていないか確認する。|
+
+### `kubectl get`: Kubernetes リソースの取得
+
+```shell
+kubectl get <リソース> <オプション>
+```
+
+Kubernetes のあらゆるリソース情報を取得できるコマンド。  
+以下では頻繁に使用するオプションについて Pod リソースを例に紹介する。  
+
+- `-n`, `--namespace`
+
+  Namespace は単一のクラスタ内部にあるリソース群を論理的に分離するために使用するリソースである。  
+  Kubernetes クラスタ作成時に `default` Namespace が自動で作成され、`--namespace` オプションを省略する場合は `default` Namespace が自動で選択される。  
+
+  ```shell
+  kubectl get pod --namespace default
+  ```
+
+  結果
+
+  ```shell
+  NAME     READY   STATUS    RESTARTS   AGE
+  myapp    1/1     Running   0          13h
+  myapp2   1/1     Running   0          16h
+  ```
+
+  リソース名を指定することで、特例のリソース情報のみを取得、表示することも可能である。  
+
+  ```shell
+  kubectl get pod myapp --namespace default
+  ```
+
+  結果
+
+  ```shell
+  NAME     READY   STATUS    RESTARTS   AGE
+  myapp    1/1     Running   0          13h
+  ```
+
+- `-o`, `--output`
+
+  `--output` オプションは、取得したリソース情報を様々な方法で出力させることができる。  
+
+  - `--output wide`
+  
+    IP アドレスや Node に関する情報を取得する。  
+  
+    ```shell
+    kubectl get pod --namespace default --output wide
+    ```
+
+    結果  
+
+    ```shell
+    NAME     READY   STATUS    RESTARTS   AGE   IP                NODE    NOMINATED NODE   READINESS GATES
+    myapp    1/1     Running   0          13h   xxx.xxx.xxx.xxx   node2   <none>           <none>
+    myapp2   1/1     Running   0          16h   xxx.xxx.xxx.yyy   node2   <none>           <none>
+    ```
+
+  - `--output yaml`
+  
+    YAML ファイル形式でリソース情報を取得する。  
+
+    ```shell
+    kubectl get pod myapp --namespace default --output yaml
+    ```
+
+    結果
+
+    ```yaml
+    apiVersion: v1
+    kind: Pod
+    metadata:
+      annotations:
+    ~~~省略~~~
+    ```
+
